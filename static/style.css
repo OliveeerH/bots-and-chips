@@ -1,0 +1,96 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+header {
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 36px;
+  margin: 0;
+}
+
+.auth-links a {
+  color: #f4d03f;
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.auth-links a:hover {
+  color: #ffffff;
+}
+
+.sobre-nosotros {
+  padding: 40px;
+  background-color: #ffffff;
+  border-bottom: 3px solid #1a1a1a;
+}
+
+.sobre-nosotros h2 {
+  font-size: 28px;
+  color: #1a1a1a;
+}
+
+.mas-vendidos {
+  padding: 40px;
+  background-color: #f4f4f4;
+}
+
+.mas-vendidos h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+.productos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.producto {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  width: 220px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.producto h3 {
+  font-size: 20px;
+  color: #1a1a1a;
+}
+
+.producto p {
+  font-size: 18px;
+  margin: 10px 0;
+  color: #555;
+}
+
+.producto button {
+  background-color: #f4d03f;
+  color: #1a1a1a;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.producto button:hover {
+  background-color: #ffcc00;
+}
+

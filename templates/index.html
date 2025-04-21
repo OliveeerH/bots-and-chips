@@ -1,3 +1,36 @@
 <!DOCTYPE html>
-<h4>mau gei</h4>
-<h3>Hola mundo</h3>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>ROBOKIDS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>ROBOKIDS</h1>
+        <div class="auth-links">
+            <a href="#">Inicia sesión</a>
+            <a href="#">Regístrate</a>
+        </div>
+    </header>
+
+    <section class="sobre-nosotros">
+        <h2>Sobre nosotros</h2>
+        <p>Somos una tienda apasionada por la robótica y mecatrónica. Fomentamos la creatividad y el aprendizaje con metodología STEAM.</p>
+    </section>
+
+    <section class="mas-vendidos">
+        <h2>Más vendidos</h2>
+        <div class="productos">
+            {% for producto in productos %}
+                <div class="producto">
+                    <h3>{{ producto[0] }}</h3>
+                    <p>{{ producto[1] }} MXN</p>
+                    <button>Ver producto</button>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+</body>
+</html>
+
