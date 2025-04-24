@@ -74,5 +74,3 @@ if not os.path.exists('tienda.db'):
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-

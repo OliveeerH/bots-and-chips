@@ -1,13 +1,13 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f5f5f5;
+  background-color: #7896AB;
   color: #333;
 }
 
 header {
-  background-color: #1a1a1a;
-  color: #fff;
+  background-color: #7896AB;
+  color: #1E486B;
   padding: 20px 40px;
   display: flex;
   justify-content: space-between;
@@ -20,7 +20,7 @@ header h1 {
 }
 
 .auth-links a {
-  color: #f4d03f;
+  color: #1E486B;
   margin-left: 20px;
   text-decoration: none;
   font-weight: bold;
@@ -32,7 +32,7 @@ header h1 {
 
 .sobre-nosotros {
   padding: 40px;
-  background-color: #ffffff;
+  background-color: #7896AB;
   border-bottom: 3px solid #1a1a1a;
 }
 
@@ -43,7 +43,7 @@ header h1 {
 
 .mas-vendidos {
   padding: 40px;
-  background-color: #f4f4f4;
+  background-color: #7896AB;
 }
 
 .mas-vendidos h2 {
@@ -70,7 +70,7 @@ header h1 {
 
 .producto h3 {
   font-size: 20px;
-  color: #1a1a1a;
+  color: #1E486B ;
 }
 
 .producto p {
@@ -80,7 +80,7 @@ header h1 {
 }
 
 .producto button {
-  background-color: #f4d03f;
+  background-color: #7896AB;
   color: #1a1a1a;
   border: none;
   padding: 10px 15px;
