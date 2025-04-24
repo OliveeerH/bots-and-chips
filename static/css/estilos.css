@@ -1,66 +1,106 @@
-/* estilos.css */
-
+/* ---- básicos ---- */
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: Poppins, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #7896AB;
+    background: #7896AB;
     color: #222;
 }
 
 header {
-    background-color: #7896AB;
+    background: #7896AB;
     color: #fff;
     padding: 20px;
     text-align: center;
-    font-size: 32px;
-    font-weight: bold;
 }
 
-nav {
-    display: flex;
-    justify-content: flex-end;
-    padding: 10px 20px;
-    background-color: #7896AB;
-}
-
-nav a {
-    color: #7896AB;
+.auth-links a {
+    color: #fff;
+    margin: 0 8px;
     text-decoration: none;
-    margin-left: 20px;
-    font-weight: bold;
 }
 
-.container {
-    padding: 30px 50px;
-}
-
-h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-.productos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 30px;
-    margin-top: 20px;
-}
-
-.producto {
-    background-color: #f2f2f2;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+/* ---- sobre nosotros ---- */
+.sobre-nosotros {
+    padding: 20px;
     text-align: center;
 }
 
-.producto h3 {
-    font-size: 20px;
-    margin: 10px 0 5px 0;
+/* ---- grid ---- */
+.mas-vendidos {
+    padding: 20px;
 }
 
-.producto p {
-    font-size: 16px;
-    margin: 0;
+.productos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 20px;
 }
+
+/* ---- tarjeta genérica ---- */
+.producto {
+    background: #f2f2f2;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .15);
+}
+
+/* ---- ventana para la foto ---- */
+.producto.img-wrap {
+    position: relative;
+    overflow: hidden;
+    height: 220px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-width: 180px; /* Prevent shrinking below grid's minimum */
+}
+
+/* ---- imagen ---- */
+.producto.img-wrap img.thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* ---- textos ---- */
+.producto h3 {
+    margin: 6px 0;
+    font-size: 18px;
+}
+
+.producto.img-wrap h3 {
+    margin: 6px 0;
+    font-size: 18px;
+    padding: 0 10px; /* Prevent text from touching edges */
+}
+
+.producto.img-wrap .precio {
+    font-weight: 700;
+    color: #0b875b;
+    margin: 0 0 8px;
+    padding: 0 10px;
+}
+
+.precio {
+    font-weight: 700;
+    color: #0b875b;
+    margin: 0 0 8px;
+}
+  
+  
+
+
+
+
+
+
+
+
+
