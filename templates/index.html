@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Bots and Chips</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
 </head>
 <body>
 <header>
   <h1>Bots and Chips</h1>
   <nav class="auth-links">
-    <a href="#">Iniciar sesión</a>
-    <a href="#">Regístrate</a>
+    <a href="{{ url_for('login') }}">Iniciar sesión</a>
+    <a href="{{ url_for('registro') }}">Regístrate</a>
   </nav>
 </header>
 
@@ -51,10 +51,3 @@
 </section>
 </body>
 </html>
-
-
-
-
-
-
-
