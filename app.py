@@ -19,11 +19,9 @@ def conectar_db():
 # Ruta principal
 @app.route('/')
 def index():
-    # Conectar a la base de datos
     conn = conectar_db()
     if conn is None:
         return "Error: No se pudo conectar a la base de datos.", 500
-
     try:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM productos")
@@ -33,8 +31,7 @@ def index():
         return "Error: No se pudo obtener los productos.", 500
     finally:
         conn.close()
-
-    return render_template('index.html', productos=productos)
+    return render_template('principal.html', productos=productos)
 
 # Ruta para iniciar sesión
 @app.route('/login', methods=['GET', 'POST'])
