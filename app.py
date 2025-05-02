@@ -7,7 +7,7 @@ app = Flask(__name__)
 # Llamamos a init_db() para asegurarnos de que la base de datos y las tablas existan
 init_db()
 
-# Función para conectar a la base de datos
+# Funcn para conectar a la base de datos
 def conectar_db():
     try:
         conn = sqlite3.connect('tienda.db')
