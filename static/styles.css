@@ -1,0 +1,13 @@
+body{
+    background-color: #C4DBEB;
+}
+
+@font-face {
+    font-family: titulos;
+    src: url(BalsamiqSans-Regular.ttf);
+  }
+
+@font-face {
+    font-family: contenido;
+    src: url(Agrandir-Regular.otf);
+  }
