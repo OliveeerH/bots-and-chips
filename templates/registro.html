@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Regístrate - Robokids</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Agrandir', sans-serif;
+            background-color: #C4DBEB;
+            color: #1E486B;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            max-width: 600px;
+            width: 100%;
+            padding: 1rem;
+        }
+        label {
+            font-weight: medium;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 1rem;
+            background-color: #fff;
+            color: #1E486B;
+            margin-bottom: 1rem;
+        }
+        input::placeholder {
+            color: #1E486B;
+            opacity: 0.7;
+        }
+        .required::after {
+            content: "*";
+            color: #1E486B;
+        }
+        p.small-text {
+            grid-column: span 2;
+            text-align: center;
+            font-size: 0.875rem;
+            margin: 0.5rem 0;
+        }
+        button {
+            grid-column: span 2;
+            background-color: #1E486B;
+            color: #fff;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #16354F;
+        }
+        p a {
+            color: #1E486B;
+            text-decoration: underline;
+        }
+        p.login-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h2>REGISTRO DE SESIÓN</h2>
+    <form method="POST">
+        <div>
+            <label class="required">NOMBRE</label>
+            <input type="text" name="nombre" required placeholder="FLORENTINA">
+        </div>
+        <div>
+            <label class="required">APELLIDO(S)</label>
+            <input type="text" name="apellido" required placeholder="FLORES">
+        </div>
+        <div>
+            <label class="required">CORREO ELECTRÓNICO</label>
+            <input type="email" name="correo" required placeholder="TU@CORREO.COM">
+        </div>
+        <div>
+            <label class="required">CONTRASEÑA</label>
+            <input type="password" name="contraseña" required placeholder="CONTRASEÑA123">
+        </div>
+        <p class="small-text">*CAMPOS OBLIGATORIOS</p>
+        <button type="submit">REGISTRATE</button>
+        <p class="login-link">¿YA TIENES CUENTA? <a href="{{ url_for('login') }}">INICIA SESIÓN</a></p>
+    </form>
+</body>
+</html>

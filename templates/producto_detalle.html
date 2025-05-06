@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ producto[1] }} - Detalles</title>
+  <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Agrandir', sans-serif;
+      margin: 0;
+      background-color: #C4DBEB;
+      color: #1E486B;
+      padding-top: 80px;
+    }
+    header {
+      background-color: #C4DBEB;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      z-index: 1000;
+    }
+    .logo-header img {
+      height: 60px;
+      width: auto;
+    }
+    .producto-detalle {
+      text-align: center;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .producto-detalle img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .producto-detalle h2 {
+      font-size: 2rem;
+      margin: 20px 0;
+    }
+    .producto-detalle p {
+      font-size: 1.2rem;
+      line-height: 1.5rem;
+    }
+    .producto-detalle .precio {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #1E486B;
+    }
+    .boton-carrito {
+      background-color: #1E486B;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+    .boton-carrito:hover {
+      background-color: #AFC9DD;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-header">
+      <img src="{{ url_for('static', filename='img/bots_and_chips2.png') }}" alt="Logo">
+    </div>
+  </header>
+
+  <div class="producto-detalle">
+    <img src="{{ url_for('static', filename='img/' + (producto[4] if producto[1] != 'Carrito Robótico' and producto[1] != 'Seguidor de líneas' and producto[1] != 'Tanque Robótico' else 'carrito_robotico.png' if producto[1] == 'Carrito Robótico' else 'seguidor_de_linea.png' if producto[1] == 'Seguidor de líneas' else 'tanque_robotico.png')) }}" alt="{{ producto[1] }}">
+    <h2>{{ producto[1] }}</h2>
+    <p>{{ producto[2] }}</p>
+    <p class="precio">${{ producto[3] }}</p>
+    <a href="#" class="boton-carrito">Añadir al carrito</a>
+  </div>
+</body>
+</html>

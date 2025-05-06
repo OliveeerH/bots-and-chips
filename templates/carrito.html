@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito de Compras</title>
+    <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Agrandir', sans-serif;
+            margin: 0;
+            background-color: #C4DBEB;
+            color: #1E486B;
+        }
+        .cart-container {
+            padding: 20px;
+            text-align: center;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .cart-item h4 {
+            font-size: 1.2rem;
+        }
+        .cart-item .price {
+            font-size: 1.2rem;
+        }
+        .total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .checkout-btn {
+            background-color: #1E486B;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <h2>Tu Carrito</h2>
+        {% for item in carrito %}
+            <div class="cart-item">
+                <h4>{{ item['nombre'] }}</h4>
+                <p class="price">${{ item['precio'] }}</p>
+            </div>
+        {% endfor %}
+        
+        <div class="total">
+            Total: ${{ total }}
+        </div>
+
+        <form action="{{ url_for('pagar') }}" method="POST">
+            <button type="submit" class="checkout-btn">Pagar</button>
+        </form>
+    </div>
+</body>
+</html>
