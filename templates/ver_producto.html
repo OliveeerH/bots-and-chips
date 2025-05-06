@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ producto[1] }}</title>
+    <!-- Cargar solo el archivo CSS de tu sitio -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+    <div class="producto-detalle">
+        <h1 class="titulo-producto">{{ producto[1] }}</h1> <!-- Nombre del producto -->
+        
+        <div class="detalles-producto">
+            <div class="imagen-producto">
+                <img src="{{ url_for('static', filename='images/' + producto[4]) }}" alt="{{ producto[1] }}" class="producto-imagen">
+            </div>
+
+            <div class="info-producto">
+                <p class="descripcion">{{ producto[2] }}</p> <!-- Descripción del producto -->
+                <p class="precio">Precio: ${{ producto[3] }}</p> <!-- Precio del producto -->
+
+                <!-- Botón para agregar al carrito -->
+                <form action="{{ url_for('agregar_carrito', producto_id=producto[0]) }}" method="POST">
+                    <button type="submit" class="btn-agregar">Añadir al carrito</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+

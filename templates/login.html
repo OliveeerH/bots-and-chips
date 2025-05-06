@@ -4,17 +4,45 @@
     <meta charset="UTF-8">
     <title>Inicia Sesión - Robokids</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Agrandir', sans-serif;
+            background-color: #C4DBEB;
+        }
+        .text-custom-blue {
+            color: #1E486B;
+        }
+    </style>
 </head>
-<body>
-    <h2>Inicia Sesión</h2>
-    <form method="POST">
-        <label>Correo electrónico:</label><br>
-        <input type="email" name="correo" required><br>
-        <label>Contraseña:</label><br>
-        <input type="password" name="contraseña" required><br>
-        <button type="submit">Entrar</button>
-    </form>
-    <p>¿No tienes cuenta? <a href="{{ url_for('registro') }}">Regístrate</a></p>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="flex flex-col md:flex-row items-center justify-between w-full max-w-4xl p-6">
+        <div class="w-full md:w-1/2">
+            <h2 class="text-3xl font-bold text-custom-blue text-center mb-6">INICIO DE SESIÓN</h2>
+            <form method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-custom-blue font-medium mb-2">CORREO ELECTRÓNICO*</label>
+                    <input type="email" name="correo" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="TU@CORREO.COM">
+                </div>
+                <div>
+                    <label class="block text-custom-blue font-medium mb-2">CONTRASEÑA*</label>
+                    <input type="password" name="contraseña" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="CONTRASEÑA123">
+                </div>
+                <p class="text-custom-blue text-sm mb-4">*CAMPOS OBLIGATORIOS</p>
+                <button type="submit" class="w-full bg-[#1E486B] text-white p-3 rounded-lg hover:bg-blue-900 transition">INICIA SESIÓN</button>
+            </form>
+            <p class="text-center text-custom-blue mt-4">¿AÚN NO TIENES CUENTA? <a href="{{ url_for('registro') }}">REGÍSTRATE</a></p>
+        </div>
+        <div class="w-full md:w-1/2 mt-6 md:mt-0 text-center">
+            <p class="text-custom-blue mb-4">O TAMBIÉN INICIA SESIÓN CON</p>
+            <div class="flex justify-center space-x-4">
+                <a href="#" class="text-custom-blue"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-custom-blue"><i class="fab fa-google"></i></a>
+                <a href="#" class="text-custom-blue"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/your-kit-code-here.js" crossorigin="anonymous"></script>
 </body>
 </html>
-
