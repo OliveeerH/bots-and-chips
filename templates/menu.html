@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}"">
+    <title> menu </menu></title>
+</head>
+<body>
+    Menu
+    <ul>
+        <li><a href="{{url_for ('buscar')}}"> BUSCAR </a> </li>
+        <li><a href="{{url_for('producto_detalle')}}">POPULAR</a></li>
+        <li><a href="{{url_for('componentes')}}">COMPONENTES</a></li>       
+        <li><a href="{{url_for('robokids')}}">ROBOKIDS</a></li>
+        <li><a href=""></a></li>
+        <li><a href=""></a></li>
+        <li><a href=""></a></li>
+        <li><a href=""></a></li>
+    </ul>
+</body>
+</html>

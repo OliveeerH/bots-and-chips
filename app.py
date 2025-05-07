@@ -179,5 +179,22 @@ def pagar():
 @app.route('/inicio')
 def inicio():
     return render_template('principal.html')
+
+@app.route('/menu')
+def menu():
+    return render_template('menu.html')
+
+@app.route('/componentes')
+def componentes():
+    return render_template('componentes.html')
+
+@app.route('/robokids')
+def robokids():
+    return render_template('robokids.html')
+
+@app.route('/producto_detalle')
+def producto_detalle():
+    return render_template('producto_detalle.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
