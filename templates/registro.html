@@ -2,110 +2,44 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Regístrate - Robokids</title>
+    <title>Bots and Chips - Registro</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
     <style>
         body {
             font-family: 'Agrandir', sans-serif;
-            background-color: #C4DBEB;
+            background: linear-gradient(to right, #e6f0fa, #d0e1f9);
+        }
+        .text-custom-blue {
             color: #1E486B;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        h2 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            max-width: 600px;
-            width: 100%;
-            padding: 1rem;
-        }
-        label {
-            font-weight: medium;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-        input {
-            width: 100%;
-            padding: 0.75rem;
-            border: none;
-            border-radius: 1rem;
-            background-color: #fff;
-            color: #1E486B;
-            margin-bottom: 1rem;
-        }
-        input::placeholder {
-            color: #1E486B;
-            opacity: 0.7;
-        }
-        .required::after {
-            content: "*";
-            color: #1E486B;
-        }
-        p.small-text {
-            grid-column: span 2;
-            text-align: center;
-            font-size: 0.875rem;
-            margin: 0.5rem 0;
-        }
-        button {
-            grid-column: span 2;
-            background-color: #1E486B;
-            color: #fff;
-            padding: 0.75rem;
-            border: none;
-            border-radius: 1rem;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #16354F;
-        }
-        p a {
-            color: #1E486B;
-            text-decoration: underline;
-        }
-        p.login-link {
-            text-align: center;
-            margin-top: 1rem;
         }
     </style>
 </head>
-<body>
-    <h2>REGISTRO DE SESIÓN</h2>
-    <form method="POST">
-        <div>
-            <label class="required">NOMBRE</label>
-            <input type="text" name="nombre" required placeholder="FLORENTINA">
-        </div>
-        <div>
-            <label class="required">APELLIDO(S)</label>
-            <input type="text" name="apellido" required placeholder="FLORES">
-        </div>
-        <div>
-            <label class="required">CORREO ELECTRÓNICO</label>
-            <input type="email" name="correo" required placeholder="TU@CORREO.COM">
-        </div>
-        <div>
-            <label class="required">CONTRASEÑA</label>
-            <input type="password" name="contraseña" required placeholder="CONTRASEÑA123">
-        </div>
-        <p class="small-text">*CAMPOS OBLIGATORIOS</p>
-        <button type="submit">REGISTRATE</button>
-        <p class="login-link">¿YA TIENES CUENTA? <a href="{{ url_for('login') }}">INICIA SESIÓN</a></p>
-    </form>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="flex flex-col items-center w-full max-w-2xl p-6">
+        <h2 class="text-3xl font-bold text-custom-blue text-center mb-6">REGÍSTRATE</h2>
+        <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div>
+                <label class="block text-custom-blue font-medium mb-2">NOMBRE*</label>
+                <input type="text" name="nombre" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="FLORENTINA">
+            </div>
+            <div>
+                <label class="block text-custom-blue font-medium mb-2">APELLIDO*</label>
+                <input type="text" name="apellido" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="FLORES">
+            </div>
+            <div>
+                <label class="block text-custom-blue font-medium mb-2">CORREO ELECTRÓNICO*</label>
+                <input type="email" name="correo" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="TU@CORREO.COM">
+            </div>
+            <div>
+                <label class="block text-custom-blue font-medium mb-2">CONTRASEÑA*</label>
+                <input type="password" name="contraseña" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="CONTRASEÑA123">
+            </div>
+            <p class="text-custom-blue text-sm mb-4 col-span-2 text-center">*CAMPOS OBLIGATORIOS</p>
+            <button type="submit" class="col-span-2 w-full bg-[#5a4fc2] text-white p-3 rounded-lg hover:bg-[#4a3fa2] transition">REGISTRARSE</button>
+        </form>
+        <p class="text-center text-custom-blue mt-4">¿YA TIENES CUENTA? <a href="{{ url_for('login') }}" class="text-[#5a4fc2] hover:underline">INICIA SESIÓN</a></p>
+    </div>
 </body>
 </html>

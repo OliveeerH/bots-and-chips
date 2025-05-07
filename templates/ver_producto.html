@@ -3,33 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ producto[1] }}</title>
-    <!-- Cargar solo el archivo CSS de tu sitio -->
+    <title>{{ producto[1] }} - Bots and Chips</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e6f0fa, #d0e1f9);
+            margin: 0;
+            padding: 0;
+        }
+        .producto-detalle {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .titulo-producto {
+            font-size: 2.5rem;
+            color: #1E486B;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .detalles-producto {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .imagen-producto {
+            flex: 1;
+            min-width: 300px;
+        }
+        .producto-imagen {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .info-producto {
+            flex: 1;
+            min-width: 300px;
+        }
+        .descripcion {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .precio {
+            font-size: 1.5rem;
+            color: #1E486B;
+            margin-bottom: 20px;
+        }
+        .btn-agregar {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #7896ab;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-agregar:hover {
+            background: #4a3fa2;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #5a4fc2;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <div class="producto-detalle">
-        <h1 class="titulo-producto">{{ producto[1] }}</h1> <!-- Nombre del producto -->
-        
+        <h1 class="titulo-producto">{{ producto[1] }}</h1>
         <div class="detalles-producto">
             <div class="imagen-producto">
-                <img src="{{ url_for('static', filename='images/' + producto[4]) }}" alt="{{ producto[1] }}" class="producto-imagen">
+                <img src="{{ url_for('static', filename='img/' + 
+                    (producto[4] if producto[1] != 'Carrito Robótico' and producto[1] != 'Seguidor de líneas' and producto[1] != 'Tanque Robótico' else
+                    'carrito_robotico.png' if producto[1] == 'Carrito Robótico' else
+                    'seguidor_de_linea.png' if producto[1] == 'Seguidor de líneas' else
+                    'tanque_robotico.png')) }}" alt="{{ producto[1] }}" class="producto-imagen">
             </div>
-
             <div class="info-producto">
-                <p class="descripcion">{{ producto[2] }}</p> <!-- Descripción del producto -->
-                <p class="precio">Precio: ${{ producto[3] }}</p> <!-- Precio del producto -->
-
-                <!-- Botón para agregar al carrito -->
+                <p class="descripcion">{{ producto[2] }}</p>
+                <p class="precio">Precio: ${{ producto[3] }}</p>
                 <form action="{{ url_for('agregar_carrito', producto_id=producto[0]) }}" method="POST">
                     <button type="submit" class="btn-agregar">Añadir al carrito</button>
                 </form>
             </div>
         </div>
+        <a href="{{ url_for('index') }}" class="back-link">Volver a la página principal</a>
     </div>
 </body>
 </html>
-
-
-
-

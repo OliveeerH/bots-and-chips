@@ -2,29 +2,52 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Carrito de Compras</title>
+    <title>Bots and Chips - Carrito de Compras</title>
     <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
     <style>
         body {
             font-family: 'Agrandir', sans-serif;
             margin: 0;
-            background-color: #C4DBEB;
+            background: linear-gradient(to right, #e6f0fa, #d0e1f9);
             color: #1E486B;
         }
         .cart-container {
+            max-width: 800px;
+            margin: 40px auto;
             padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
         .cart-item {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
         }
         .cart-item h4 {
             font-size: 1.2rem;
+            margin: 0;
         }
         .cart-item .price {
             font-size: 1.2rem;
+        }
+        .cart-item form {
+            display: inline;
+        }
+        .cart-item button {
+            background: #ff4444;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .cart-item button:hover {
+            background: #cc0000;
         }
         .total {
             font-size: 1.5rem;
@@ -32,31 +55,53 @@
             margin-top: 20px;
         }
         .checkout-btn {
-            background-color: #1E486B;
+            background: #5a4fc2;
             color: white;
             padding: 10px 20px;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background 0.3s;
+        }
+        .checkout-btn:hover {
+            background: #4a3fa2;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #5a4fc2;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="cart-container">
         <h2>Tu Carrito</h2>
-        {% for item in carrito %}
-            <div class="cart-item">
-                <h4>{{ item['nombre'] }}</h4>
-                <p class="price">${{ item['precio'] }}</p>
+        {% if carrito %}
+            {% for item in carrito %}
+                <div class="cart-item">
+                    <h4>{{ item['nombre'] }}</h4>
+                    <p class="price">${{ item['precio'] }} x {{ item['cantidad'] }}</p>
+                    <form action="{{ url_for('eliminar_del_carrito', producto_id=item['id']) }}" method="POST">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </div>
+            {% endfor %}
+            <div class="total">
+                Total: ${{ total }}
             </div>
-        {% endfor %}
-        
-        <div class="total">
-            Total: ${{ total }}
-        </div>
-
-        <form action="{{ url_for('pagar') }}" method="POST">
-            <button type="submit" class="checkout-btn">Pagar</button>
-        </form>
+            <form action="{{ url_for('pagar') }}" method="POST">
+                <button type="submit" class="checkout-btn">Pagar</button>
+            </form>
+        {% else %}
+            <p>Tu carrito está vacío.</p>
+        {% endif %}
+        <a href="{{ url_for('index') }}" class="back-link">Volver a la página principal</a>
     </div>
 </body>
 </html>

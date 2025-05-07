@@ -1,95 +1,182 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Bots and Chips - Principal</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
-    <style>
-        /* Estilos adicionales para la nueva estructura */
-        .header-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 20px;
-            background: #7896AB;
-            color: #fff;
-        }
+  <meta charset="UTF-8">
+  <title>Bots and Chips - Principal</title>
+  <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Agrandir', sans-serif;
+      margin: 0;
+      background-color: #C4DBEB;
+      color: #1E486B;
+      padding-top: 80px; /* Para que el header fijo no se sobreponga al contenido */
+    }
 
-        .header-container h1 {
-            margin: 0;
-            font-size: 24px;
-        }
+    header {
+      background-color: #C4DBEB;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      z-index: 1000; /* Asegura que el header esté por encima de todo */
+    }
 
-        .search-bar {
-            flex-grow: 1;
-            margin: 0 20px;
-            position: relative;
-        }
+    .logo-header img {
+      height: 60px;
+      width: auto;
+    }
 
-        .search-bar input {
-            width: 100%;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            font-size: 14px;
-        }
+    .nav-center {
+      display: flex;
+      gap: 2rem;
+      font-weight: bold;
+      color: #1E486B;
+    }
 
-        .user-actions a {
-            color: #fff;
-            margin-left: 15px;
-            text-decoration: none;
-            font-size: 20px;
-        }
+    .menu-icon {
+      font-size: 1.8rem;
+      color: #1E486B;
+      cursor: pointer;
+    }
 
-        .categories-menu {
-            background: #5a7285;
-            padding: 10px 20px;
-            text-align: center;
-        }
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 160px); /* Ajustado para el header fijo */
+      text-align: center;
+      padding: 20px;
+    }
 
-        .categories-menu a {
-            color: #fff;
-            margin: 0 15px;
-            text-decoration: none;
-            font-size: 14px;
-        }
+    .main-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      max-width: 1000px;
+    }
 
-        .categories-menu a:hover {
-            text-decoration: underline;
-        }
+    .logo img {
+      width: 250px;
+      height: auto;
+    }
 
-        /* Ajustes para productos */
-        .producto img {
-            width: 100%;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 10px 10px 0 0;
-        }
-    </style>
+    .text-content {
+      max-width: 500px;
+      text-align: left;
+    }
+
+    .text-content h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .text-content p {
+      font-size: 1.1rem;
+      line-height: 1.6rem;
+    }
+
+    .buttons {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .buttons a {
+      background-color: white;
+      color: #1E486B;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .buttons a:hover {
+      background-color: #AFC9DD;
+    }
+
+    /* Estilos para productos */
+    #productos {
+      display: none;
+      text-align: center;
+      padding: 2rem 0;
+    }
+
+    .productos-lista {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .producto-item {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1rem;
+      width: 220px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+
+    .producto-item:hover {
+      transform: translateY(-10px);
+    }
+
+    .producto-item img {
+      width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      .text-content {
+        text-align: center;
+      }
+      .nav-center {
+        display: none;
+      }
+    }
+  </style>
+  <script>
+    function mostrarProductos() {
+      document.getElementById("productos").style.display = "block";
+      document.getElementById("contenido-principal").style.display = "none";
+      document.getElementById("buttons-section").style.display = "block"; /* Mostrar botones también en la sección de productos */
+    }
+
+    function mostrarContenidoPrincipal() {
+      document.getElementById("productos").style.display = "none";
+      document.getElementById("contenido-principal").style.display = "block";
+      document.getElementById("buttons-section").style.display = "block"; /* Asegurarse de que los botones estén visibles */
+    }
+  </script>
 </head>
 <body>
-    <!-- Header con logo, barra de búsqueda y botones -->
-    <header class="header-container">
-        <h1>Bots and Chips</h1>
-        <div class="search-bar">
-            <input type="text" placeholder="¿Qué estás buscando?">
-        </div>
-        <div class="user-actions">
-            <a href="{{ url_for('login') }}" title="Iniciar sesión">👤</a>
-            <a href="#" title="Carrito de compras">🛒</a>
-            <a href="#" title="Favoritos">❤️</a>
-        </div>
-    </header>
 
-    <!-- Menú de categorías -->
-    <nav class="categories-menu">
-        <a href="#">Kits</a>
-        <a href="#">Sensores</a>
-        <a href="#">Motores</a>
-        <a href="#">Placas</a>
-        <a href="#">Accesorios</a>
-        <a href="#">Herramientas</a>
-        <a href="#">Cables</a>
+  <!-- Header con logo, navegación centrada y menú a la derecha -->
+  <header id="header">
+    <div class="logo-header">
+      <img src="{{ url_for('static', filename='img/bots_and_chips2.png') }}" alt="Logo">
+    </div>
+    <nav class="nav-center">
+      <a href="javascript:void(0)" onclick="mostrarProductos()">POPULAR</a>
+      <span>COMPONENTES</span>
+      <span>ROBOKIDS</span>
     </nav>
     <div class="menu-icon">☰</div>
   </header>
@@ -141,8 +228,3 @@
   </section>
 </body>
 </html>
-
-
-
-
-

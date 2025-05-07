@@ -2,17 +2,21 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Inicia Sesión - Robokids</title>
+    <title>Bots and Chips - Iniciar Sesión</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
     <style>
         body {
             font-family: 'Agrandir', sans-serif;
-            background-color: #C4DBEB;
+            background: linear-gradient(to right, #e6f0fa, #d0e1f9);
         }
         .text-custom-blue {
             color: #1E486B;
+        }
+        .social-login a {
+            font-size: 24px;
+            margin: 0 10px;
         }
     </style>
 </head>
@@ -30,19 +34,18 @@
                     <input type="password" name="contraseña" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="CONTRASEÑA123">
                 </div>
                 <p class="text-custom-blue text-sm mb-4">*CAMPOS OBLIGATORIOS</p>
-                <button type="submit" class="w-full bg-[#1E486B] text-white p-3 rounded-lg hover:bg-blue-900 transition">INICIA SESIÓN</button>
+                <button type="submit" class="w-full bg-[#5a4fc2] text-white p-3 rounded-lg hover:bg-[#4a3fa2] transition">INICIA SESIÓN</button>
             </form>
-            <p class="text-center text-custom-blue mt-4">¿AÚN NO TIENES CUENTA? <a href="{{ url_for('registro') }}">REGÍSTRATE</a></p>
+            <p class="text-center text-custom-blue mt-4">¿AÚN NO TIENES CUENTA? <a href="{{ url_for('registro') }}" class="text-[#5a4fc2] hover:underline">REGÍSTRATE</a></p>
         </div>
         <div class="w-full md:w-1/2 mt-6 md:mt-0 text-center">
             <p class="text-custom-blue mb-4">O TAMBIÉN INICIA SESIÓN CON</p>
-            <div class="flex justify-center space-x-4">
-                <a href="#" class="text-custom-blue"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="text-custom-blue"><i class="fab fa-google"></i></a>
-                <a href="#" class="text-custom-blue"><i class="fab fa-facebook-f"></i></a>
+            <div class="flex justify-center space-x-4 social-login">
+                <a href="#" class="text-custom-blue">Instagram</a>
+                <a href="#" class="text-custom-blue">Google</a>
+                <a href="#" class="text-custom-blue">Facebook</a>
             </div>
         </div>
     </div>
-    <script src="https://kit.fontawesome.com/your-kit-code-here.js" crossorigin="anonymous"></script>
 </body>
 </html>

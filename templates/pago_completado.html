@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Bots and Chips - Pago Completado</title>
+    <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Agrandir', sans-serif;
+            margin: 0;
+            background: linear-gradient(to right, #e6f0fa, #d0e1f9);
+            color: #1E486B;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .confirmation-container {
+            max-width: 600px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .confirmation-container h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .confirmation-container p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #5a4fc2;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background: #4a3fa2;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <h2>¡Pago Completado!</h2>
+        <p>Gracias por tu compra. Tu pedido ha sido procesado exitosamente.</p>
+        <a href="{{ url_for('index') }}" class="back-link">Volver a la página principal</a>
+    </div>
+</body>
+</html>
