@@ -171,7 +171,9 @@
   <!-- Header con logo, navegación centrada y menú a la derecha -->
   <header id="header">
     <div class="logo-header">
-      <img src="{{ url_for('static', filename='img/bots_and_chips2.png') }}" alt="Logo">
+      <a href="/inicio">
+        <img src="{{ url_for('static', filename='img/bots_and_chips2.png') }}" alt="Logo">
+      </a>
     </div>
     <nav class="nav-center">
       <a href="javascript:void(0)" onclick="mostrarProductos()">POPULAR</a>

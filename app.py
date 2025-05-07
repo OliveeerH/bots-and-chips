@@ -176,5 +176,8 @@ def pagar():
     session.pop('carrito', None)
     return render_template('pago_completado.html')
 
+@app.route('/inicio')
+def inicio():
+    return render_template('principal.html')
 if __name__ == '__main__':
     app.run(debug=True)

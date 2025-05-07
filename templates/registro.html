@@ -14,6 +14,21 @@
         .text-custom-blue {
             color: #1E486B;
         }
+        .a1 {
+      background-color: white;
+      color: #1E486B;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+     .a1:hover {
+      background-color: #AFC9DD;
+    }
+
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen">
@@ -40,6 +55,7 @@
             <button type="submit" class="col-span-2 w-full bg-[#5a4fc2] text-white p-3 rounded-lg hover:bg-[#4a3fa2] transition">REGISTRARSE</button>
         </form>
         <p class="text-center text-custom-blue mt-4">¿YA TIENES CUENTA? <a href="{{ url_for('login') }}" class="text-[#5a4fc2] hover:underline">INICIA SESIÓN</a></p>
+        <a class="a1" href="/inicio"> regresar al inicio </a>
     </div>
 </body>
 </html>
