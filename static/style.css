@@ -31,24 +31,24 @@ header h1 {
 
 .sobre-nosotros {
   padding: 40px;
-  background-color: #7896AB;
-  border-bottom: 3px solid #1a1a1a;
+  background-color: #C4DBEB;
+  border-bottom: 3px solid #1E486B;
 }
 
 .sobre-nosotros h2 {
   font-size: 28px;
-  color: #1a1a1a;
+  color: #1E486B;
 }
 
 .mas-vendidos {
   padding: 40px;
-  background-color: #7896AB;
+  background-color: #C4DBEB;
 }
 
 .mas-vendidos h2 {
   font-size: 28px;
   margin-bottom: 20px;
-  color: #1a1a1a;
+  color: #1E486B;
 }
 
 .productos {
@@ -80,7 +80,7 @@ header h1 {
 
 .producto button {
   background-color: #7896AB;
-  color: #1a1a1a;
+  color: #1E486B;
   border: none;
   padding: 10px 15px;
   border-radius: 8px;
