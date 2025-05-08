@@ -5,15 +5,16 @@
   <title>Bots and Chips - Principal</title>
   <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
   <style>
     body {
       font-family: 'Agrandir', sans-serif;
       margin: 0;
       background-color: #C4DBEB;
       color: #1E486B;
-      padding-top: 80px; /* Para que el header fijo no se sobreponga al contenido */
+      padding-top: 80px;
+      padding-bottom: 80px;
     }
-
     header {
       background-color: #C4DBEB;
       position: fixed;
@@ -24,36 +25,39 @@
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
-      z-index: 1000; /* Asegura que el header esté por encima de todo */
+      z-index: 1000;
     }
-
     .logo-header img {
       height: 60px;
       width: auto;
     }
-
     .nav-center {
       display: flex;
       gap: 2rem;
       font-weight: bold;
       color: #1E486B;
     }
-
+    .nav-center a, .nav-center span {
+      color: #1E486B;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-center a:hover {
+      color: #AFC9DD;
+    }
     .menu-icon {
       font-size: 1.8rem;
       color: #1E486B;
       cursor: pointer;
     }
-
     main {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: calc(100vh - 160px); /* Ajustado para el header fijo */
+      height: calc(100vh - 160px);
       text-align: center;
       padding: 20px;
     }
-
     .main-content {
       display: flex;
       align-items: center;
@@ -62,27 +66,22 @@
       flex-wrap: wrap;
       max-width: 1000px;
     }
-
     .logo img {
       width: 250px;
       height: auto;
     }
-
     .text-content {
       max-width: 500px;
       text-align: left;
     }
-
     .text-content h2 {
       font-size: 2.5rem;
       margin-bottom: 1rem;
     }
-
     .text-content p {
       font-size: 1.1rem;
       line-height: 1.6rem;
     }
-
     .buttons {
       margin-top: 2rem;
       display: flex;
@@ -90,7 +89,6 @@
       flex-wrap: wrap;
       justify-content: center;
     }
-
     .buttons a {
       background-color: white;
       color: #1E486B;
@@ -101,25 +99,20 @@
       text-decoration: none;
       transition: 0.3s;
     }
-
     .buttons a:hover {
       background-color: #AFC9DD;
     }
-
-    /* Estilos para productos */
     #productos {
       display: none;
       text-align: center;
       padding: 2rem 0;
     }
-
     .productos-lista {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 2rem;
     }
-
     .producto-item {
       background-color: white;
       border-radius: 8px;
@@ -129,16 +122,24 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s;
     }
-
     .producto-item:hover {
       transform: translateY(-10px);
     }
-
     .producto-item img {
       width: 100%;
       height: auto;
     }
-
+    .btn-ver-producto {
+      background-color: #5a4fc2;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+    .btn-ver-producto:hover {
+      background-color: #4a3fa2;
+    }
     @media (max-width: 768px) {
       .main-content {
         flex-direction: column;
@@ -156,80 +157,83 @@
     function mostrarProductos() {
       document.getElementById("productos").style.display = "block";
       document.getElementById("contenido-principal").style.display = "none";
-      document.getElementById("buttons-section").style.display = "block"; /* Mostrar botones también en la sección de productos */
+      document.getElementById("buttons-section").style.display = "block";
     }
-
     function mostrarContenidoPrincipal() {
       document.getElementById("productos").style.display = "none";
       document.getElementById("contenido-principal").style.display = "block";
-      document.getElementById("buttons-section").style.display = "block"; /* Asegurarse de que los botones estén visibles */
+      document.getElementById("buttons-section").style.display = "block";
     }
   </script>
 </head>
 <body>
-
-  <!-- Header con logo, navegación centrada y menú a la derecha -->
   <header id="header">
     <div class="logo-header">
-      <a href="/inicio">
+      <a href="{{ url_for('inicio') }}">
         <img src="{{ url_for('static', filename='img/bots_and_chips2.png') }}" alt="Logo">
       </a>
     </div>
     <nav class="nav-center">
       <a href="javascript:void(0)" onclick="mostrarProductos()">POPULAR</a>
-      <span>COMPONENTES</span>
-      <span>ROBOKIDS</span>
+      <a href="{{ url_for('componentes') }}">COMPONENTES</a>
+      <a href="{{ url_for('robokids') }}">ROBOKIDS</a>
+      {% if session.user_name %}
+        <span>Bienvenido, {{ session.user_name }}</span>
+        <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Iniciar Sesión</a>
+        <a href="{{ url_for('registro') }}">Registrarse</a>
+      {% endif %}
     </nav>
     <div class="menu-icon">
-      <a href="{{url_for('menu')}}">☰</a>
+      <a href="{{ url_for('menu') }}">☰</a>
     </div>
-    
   </header>
 
-  <!-- Contenido principal (Sobre nosotros) -->
   <main id="contenido-principal">
     <div class="main-content">
-      <!-- Primero el texto -->
       <div class="text-content">
         <h2>Sobre nosotros !</h2>
         <p>
           Somos una tienda apasionada por la robótica y mecatrónica. Nuestra mayor pasión es fomentar la creatividad, la autodidaxia y hacerle saber al público que la mecatrónica y la robótica están al alcance de todos, desde los más chicos hasta los más grandes, utilizando la metodología STEAM.
         </p>
       </div>
-  
-      <!-- Luego la imagen -->
       <div class="logo">
         <img src="{{ url_for('static', filename='img/bots_and_chips_robot.png') }}" alt="Logo">
       </div>
     </div>
   </main>
 
-  <!-- Sección de botones: visible tanto en la página principal como en la sección de productos -->
   <div id="buttons-section" class="buttons">
-    <a href="{{ url_for('login') }}">Iniciar sesión</a>
-    <a href="{{ url_for('registro') }}">Registrarse</a>
+    {% if not session.user_name %}
+      <a href="{{ url_for('login') }}">Iniciar sesión</a>
+      <a href="{{ url_for('registro') }}">Registrarse</a>
+    {% endif %}
+    <a href="{{ url_for('ver_carrito') }}">Carrito</a>
   </div>
 
-  <!-- Sección de Productos -->
-  <!-- Sección de Productos -->
-<section id="productos" style="margin-top: 30px;">
+  <section id="productos" style="margin-top: 30px;">
     <h2 style="font-size: 2.5rem; color: #1E486B; text-align: center; margin-bottom: 30px;">Más Vendidos</h2>
     <div class="productos-lista">
       {% for producto in productos %}
-        <div class="producto-item">
-          <img src="{{ url_for('static', filename='img/' + 
-            (producto[4] if producto[1] != 'Carrito Robótico' and producto[1] != 'Seguidor de líneas' and producto[1] != 'Tanque Robótico' else
-            'carrito_robotico.png' if producto[1] == 'Carrito Robótico' else
-            'seguidor_de_linea.png' if producto[1] == 'Seguidor de líneas' else
-            'tanque_robotico.png')) }}" alt="{{ producto[1] }}">
-          <h3>{{ producto[1] }}</h3>
-          <p>{{ producto[2] }}</p>
-          <p>${{ producto[3] }}</p>
-          <!-- Enlace al detalle del producto -->
-          <a href="{{ url_for('ver_producto', producto_id=producto[0]) }}" class="btn-ver-producto">Ver Producto</a>
-        </div>
+        {% if producto[1] != 'Kit de Sensores' %}
+          <div class="producto-item">
+            <img src="{{ url_for('static', filename='img/' + 
+              ('robokids-caminador.png' if producto[1] == 'Robokids Caminador' else
+              'carrito_robotico.png' if producto[1] == 'Carrito Robótico' else
+              'seguidor_de_linea.png' if producto[1] == 'Seguidor de líneas' else
+              'tanque_robotico.png' if producto[1] == 'Tanque Robótico' else
+              producto[4])) }}" alt="{{ producto[1] }}">
+            <h3>{{ producto[1] }}</h3>
+            <p>{{ producto[2] }}</p>
+            <p>${{ producto[3] }}</p>
+            <a href="{{ url_for('ver_producto', producto_id=producto[0]) }}" class="btn-ver-producto">Ver Producto</a>
+          </div>
+        {% endif %}
       {% endfor %}
     </div>
   </section>
+
+  {% include 'footer.html' %}
 </body>
 </html>

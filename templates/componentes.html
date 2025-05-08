@@ -1,25 +1,166 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Componentes - Bots and Chips</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
-    <title> componentes </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Agrandir', sans-serif;
+            background: linear-gradient(to right, #e6f0fa, #d0e1f9);
+            margin: 0;
+            padding: 0;
+            padding-top: 80px;
+            padding-bottom: 80px;
+        }
+        header {
+            background-color: #C4DBEB;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            z-index: 1000;
+        }
+        .logo-header img {
+            height: 60px;
+            width: auto;
+        }
+        .nav-center {
+            display: flex;
+            gap: 2rem;
+            font-weight: bold;
+            color: #1E486B;
+        }
+        .nav-center a, .nav-center span {
+            color: #1E486B;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .nav-center a:hover {
+            color: #AFC9DD;
+        }
+        .menu-icon {
+            font-size: 1.8rem;
+            color: #1E486B;
+            cursor: pointer;
+        }
+        .componentes-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .componentes-container h2 {
+            font-size: 2.5rem;
+            color: #1E486B;
+            margin-bottom: 20px;
+        }
+        .productos-lista {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+        .producto-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            width: 220px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .producto-item:hover {
+            transform: translateY(-10px);
+        }
+        .producto-item img {
+            width: 100%;
+            height: auto;
+        }
+        .btn-ver-producto {
+            background-color: #5a4fc2;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn-ver-producto:hover {
+            background-color: #4a3fa2;
+        }
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        @media (max-width: 768px) {
+            .nav-center {
+                display: none;
+            }
+            .producto-item {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        function mostrarProductos() {
+            window.location.href = "{{ url_for('inicio') }}";
+        }
+    </script>
 </head>
 <body>
-    <header id="header">
-        <div class="logo-header">
-          <a href="/inicio">
-            <img src="{{ url_for('static', filename='img/bots_and_chips2.png') }}" alt="Logo">
-          </a>
+    {% include 'navbar.html' %}
+
+    <div class="componentes-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <h2>Componentes</h2>
+        <div class="productos-lista">
+            {% for producto in productos %}
+                {% if producto[1] != 'Kit de Sensores' %}
+                    <div class="producto-item">
+                        <img src="{{ url_for('static', filename='img/' + 
+                            ('robokids-caminador.png' if producto[1] == 'Robokids Caminador' else
+                            'carrito_robotico.png' if producto[1] == 'Carrito Robótico' else
+                            'seguidor_de_linea.png' if producto[1] == 'Seguidor de líneas' else
+                            'tanque_robotico.png' if producto[1] == 'Tanque Robótico' else
+                            producto[4])) }}" alt="{{ producto[1] }}">
+                        <h3>{{ producto[1] }}</h3>
+                        <p>{{ producto[2] }}</p>
+                        <p>${{ producto[3] }}</p>
+                        <a href="{{ url_for('ver_producto', producto_id=producto[0]) }}" class="btn-ver-producto">Ver Producto</a>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
-        <nav class="nav-center">
-          <a href="javascript:void(0)" onclick="mostrarProductos()">POPULAR</a>
-          <span>COMPONENTES</span>
-          <span>ROBOKIDS</span>
-        </nav>
-        <div class="menu-icon">☰</div>
-      </header>
-    
+        <a href="{{ url_for('inicio') }}" style="display: inline-block; margin-top: 20px; color: #5a4fc2; text-decoration: none;">Volver a la página principal</a>
+    </div>
+
+    {% include 'footer.html' %}
 </body>
 </html>

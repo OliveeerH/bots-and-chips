@@ -5,12 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ producto[1] }} - Bots and Chips</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Agrandir', sans-serif;
             background: linear-gradient(to right, #e6f0fa, #d0e1f9);
             margin: 0;
             padding: 0;
+            padding-top: 80px;
+            padding-bottom: 80px;
+        }
+        header {
+            background-color: #C4DBEB;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            z-index: 1000;
+        }
+        .logo-header img {
+            height: 60px;
+            width: auto;
+        }
+        .nav-center {
+            display: flex;
+            gap: 2rem;
+            font-weight: bold;
+            color: #1E486B;
+        }
+        .nav-center a, .nav-center span {
+            color: #1E486B;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .nav-center a:hover {
+            color: #AFC9DD;
+        }
+        .menu-icon {
+            font-size: 1.8rem;
+            color: #1E486B;
+            cursor: pointer;
         }
         .producto-detalle {
             max-width: 800px;
@@ -79,28 +118,69 @@
         .back-link:hover {
             text-decoration: underline;
         }
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        @media (max-width: 768px) {
+            .nav-center {
+                display: none;
+            }
+        }
     </style>
+    <script>
+        function mostrarProductos() {
+            window.location.href = "{{ url_for('inicio') }}";
+        }
+    </script>
 </head>
 <body>
+    {% include 'navbar.html' %}
+
     <div class="producto-detalle">
-        <h1 class="titulo-producto">{{ producto[1] }}</h1>
-        <div class="detalles-producto">
-            <div class="imagen-producto">
-                <img src="{{ url_for('static', filename='img/' + 
-                    (producto[4] if producto[1] != 'Carrito Robótico' and producto[1] != 'Seguidor de líneas' and producto[1] != 'Tanque Robótico' else
-                    'carrito_robotico.png' if producto[1] == 'Carrito Robótico' else
-                    'seguidor_de_linea.png' if producto[1] == 'Seguidor de líneas' else
-                    'tanque_robotico.png')) }}" alt="{{ producto[1] }}" class="producto-imagen">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% if producto %}
+            <h1 class="titulo-producto">{{ producto[1] }}</h1>
+            <div class="detalles-producto">
+                <div class="imagen-producto">
+                    <img src="{{ url_for('static', filename='img/' + 
+                        ('robokids-caminador.png' if producto[1] == 'Robokids Caminador' else
+                        'carrito_robotico.png' if producto[1] == 'Carrito Robótico' else
+                        'seguidor_de_linea.png' if producto[1] == 'Seguidor de líneas' else
+                        'tanque_robotico.png' if producto[1] == 'Tanque Robótico' else
+                        producto[4])) }}" alt="{{ producto[1] }}" class="producto-imagen">
+                </div>
+                <div class="info-producto">
+                    <p class="descripcion">{{ producto[2] }}</p>
+                    <p class="precio">Precio: ${{ producto[3] }}</p>
+                    <form action="{{ url_for('agregar_carrito', producto_id=producto[0]) }}" method="POST">
+                        <button type="submit" class="btn-agregar">Añadir al carrito</button>
+                    </form>
+                </div>
             </div>
-            <div class="info-producto">
-                <p class="descripcion">{{ producto[2] }}</p>
-                <p class="precio">Precio: ${{ producto[3] }}</p>
-                <form action="{{ url_for('agregar_carrito', producto_id=producto[0]) }}" method="POST">
-                    <button type="submit" class="btn-agregar">Añadir al carrito</button>
-                </form>
-            </div>
-        </div>
-        <a href="{{ url_for('index') }}" class="back-link">Volver a la página principal</a>
+        {% else %}
+            <p class="text-center">Producto no encontrado.</p>
+        {% endif %}
+        <a href="{{ url_for('inicio') }}" class="back-link">Volver a la página principal</a>
     </div>
+
+    {% include 'footer.html' %}
 </body>
 </html>

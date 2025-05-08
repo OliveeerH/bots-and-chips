@@ -1,0 +1,22 @@
+<header id="header">
+    <div class="logo-header">
+        <a href="{{ url_for('inicio') }}">
+            <img src="{{ url_for('static', filename='img/bots_and_chips2.png') }}" alt="Logo">
+        </a>
+    </div>
+    <nav class="nav-center">
+        <a href="javascript:void(0)" onclick="mostrarProductos()">POPULAR</a>
+        <a href="{{ url_for('componentes') }}">COMPONENTES</a>
+        <a href="{{ url_for('robokids') }}">ROBOKIDS</a>
+        {% if session.user_name %}
+            <span>Bienvenido, {{ session.user_name }}</span>
+            <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Iniciar Sesión</a>
+            <a href="{{ url_for('registro') }}">Registrarse</a>
+        {% endif %}
+    </nav>
+    <div class="menu-icon">
+        <a href="{{ url_for('menu') }}">☰</a>
+    </div>
+</header>

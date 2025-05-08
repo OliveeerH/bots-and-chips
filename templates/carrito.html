@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Bots and Chips - Carrito de Compras</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
     <style>
         body {
@@ -10,6 +12,43 @@
             margin: 0;
             background: linear-gradient(to right, #e6f0fa, #d0e1f9);
             color: #1E486B;
+            padding-top: 80px;
+            padding-bottom: 80px;
+        }
+        header {
+            background-color: #C4DBEB;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            z-index: 1000;
+        }
+        .logo-header img {
+            height: 60px;
+            width: auto;
+        }
+        .nav-center {
+            display: flex;
+            gap: 2rem;
+            font-weight: bold;
+            color: #1E486B;
+        }
+        .nav-center a, .nav-center span {
+            color: #1E486B;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .nav-center a:hover {
+            color: #AFC9DD;
+        }
+        .menu-icon {
+            font-size: 1.8rem;
+            color: #1E486B;
+            cursor: pointer;
         }
         .cart-container {
             max-width: 800px;
@@ -77,11 +116,45 @@
         .back-link:hover {
             text-decoration: underline;
         }
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        @media (max-width: 768px) {
+            .nav-center {
+                display: none;
+            }
+        }
     </style>
+    <script>
+        function mostrarProductos() {
+            window.location.href = "{{ url_for('inicio') }}";
+        }
+    </script>
 </head>
 <body>
+    {% include 'navbar.html' %}
+
     <div class="cart-container">
         <h2>Tu Carrito</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         {% if carrito %}
             {% for item in carrito %}
                 <div class="cart-item">
@@ -101,7 +174,9 @@
         {% else %}
             <p>Tu carrito está vacío.</p>
         {% endif %}
-        <a href="{{ url_for('index') }}" class="back-link">Volver a la página principal</a>
+        <a href="{{ url_for('inicio') }}" class="back-link">Volver a la página principal</a>
     </div>
+
+    {% include 'footer.html' %}
 </body>
 </html>

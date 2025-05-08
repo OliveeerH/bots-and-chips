@@ -3,52 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <title>Bots and Chips - Pago Completado</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
     <style>
         body {
             font-family: 'Agrandir', sans-serif;
             margin: 0;
-            background: linear-gradient(to right, #e6f0fa, #d0e1f9);
+            background-color: #C4DBEB;
             color: #1E486B;
+            padding-top: 80px;
+        }
+        header {
+            background-color: #C4DBEB;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            min-height: 100vh;
+            padding: 1rem 2rem;
+            z-index: 1000;
         }
-        .confirmation-container {
-            max-width: 600px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+        .logo-header img {
+            height: 60px;
+            width: auto;
         }
-        .confirmation-container h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
+        .nav-center {
+            display: flex;
+            gap: 2rem;
+            font-weight: bold;
+            color: #1E486B;
         }
-        .confirmation-container p {
-            font-size: 1rem;
-            margin-bottom: 20px;
-        }
-        .back-link {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #5a4fc2;
-            color: #fff;
+        .nav-center a, .nav-center span {
+            color: #1E486B;
             text-decoration: none;
-            border-radius: 5px;
+            transition: color 0.3s;
         }
-        .back-link:hover {
-            background: #4a3fa2;
+        .nav-center a:hover {
+            color: #AFC9DD;
+        }
+        .menu-icon {
+            font-size: 1.8rem;
+            color: #1E486B;
+            cursor: pointer;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .btn {
+            background-color: #5a4fc2;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #4a3fa2;
+        }
+        @media (max-width: 768px) {
+            .nav-center {
+                display: none;
+            }
         }
     </style>
+    <script>
+        function mostrarProductos() {
+            window.location.href = "{{ url_for('inicio') }}";
+        }
+    </script>
 </head>
 <body>
-    <div class="confirmation-container">
-        <h2>¡Pago Completado!</h2>
-        <p>Gracias por tu compra. Tu pedido ha sido procesado exitosamente.</p>
-        <a href="{{ url_for('index') }}" class="back-link">Volver a la página principal</a>
+    {% include 'navbar.html' %}
+
+    <div class="container">
+        <h2 class="text-3xl font-bold text-center mb-6">Pago Completado</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} p-3 mb-4 rounded-lg text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <p class="text-center">¡Gracias por tu compra! Tu pedido ha sido procesado exitosamente.</p>
+        <a href="{{ url_for('inicio') }}" class="btn mt-4 inline-block">Volver a Inicio</a>
     </div>
 </body>
 </html>

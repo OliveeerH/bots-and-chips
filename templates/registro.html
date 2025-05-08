@@ -2,60 +2,177 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Bots and Chips - Registro</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse - Bots and Chips</title>
     <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
     <style>
         body {
             font-family: 'Agrandir', sans-serif;
+            margin: 0;
             background: linear-gradient(to right, #e6f0fa, #d0e1f9);
+            color: #1E486B;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding-top: 80px;
+            padding-bottom: 80px;
         }
-        .text-custom-blue {
+        header {
+            background-color: #C4DBEB;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            z-index: 1000;
+        }
+        .logo-header img {
+            height: 60px;
+            width: auto;
+        }
+        .nav-center {
+            display: flex;
+            gap: 2rem;
+            font-weight: bold;
             color: #1E486B;
         }
-        .a1 {
-      background-color: white;
-      color: #1E486B;
-      padding: 12px 24px;
-      border-radius: 999px;
-      font-weight: bold;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-
-     .a1:hover {
-      background-color: #AFC9DD;
-    }
-
+        .nav-center a, .nav-center span {
+            color: #1E486B;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .nav-center a:hover {
+            color: #AFC9DD;
+        }
+        .menu-icon {
+            font-size: 1.8rem;
+            color: #1E486B;
+            cursor: pointer;
+        }
+        .register-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .register-container h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #1E486B;
+        }
+        .register-container input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .register-container button {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #5a4fc2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .register-container button:hover {
+            background-color: #4a3fa2;
+        }
+        .login-link {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        .login-link a {
+            color: #5a4fc2;
+            text-decoration: none;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        @media (max-width: 768px) {
+            .nav-center {
+                display: none;
+            }
+            .register-container {
+                margin: 20px;
+            }
+        }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
-    <div class="flex flex-col items-center w-full max-w-2xl p-6">
-        <h2 class="text-3xl font-bold text-custom-blue text-center mb-6">REGÍSTRATE</h2>
-        <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-            <div>
-                <label class="block text-custom-blue font-medium mb-2">NOMBRE*</label>
-                <input type="text" name="nombre" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="FLORENTINA">
-            </div>
-            <div>
-                <label class="block text-custom-blue font-medium mb-2">APELLIDO*</label>
-                <input type="text" name="apellido" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="FLORES">
-            </div>
-            <div>
-                <label class="block text-custom-blue font-medium mb-2">CORREO ELECTRÓNICO*</label>
-                <input type="email" name="correo" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="TU@CORREO.COM">
-            </div>
-            <div>
-                <label class="block text-custom-blue font-medium mb-2">CONTRASEÑA*</label>
-                <input type="password" name="contraseña" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="CONTRASEÑA123">
-            </div>
-            <p class="text-custom-blue text-sm mb-4 col-span-2 text-center">*CAMPOS OBLIGATORIOS</p>
-            <button type="submit" class="col-span-2 w-full bg-[#5a4fc2] text-white p-3 rounded-lg hover:bg-[#4a3fa2] transition">REGISTRARSE</button>
+<body>
+    <header id="header">
+        <div class="logo-header">
+            <a href="{{ url_for('inicio') }}">
+                <img src="{{ url_for('static', filename='img/bots_and_chips2.png') }}" alt="Logo">
+            </a>
+        </div>
+        <nav class="nav-center">
+            <a href="javascript:void(0)" onclick="mostrarProductos()">POPULAR</a>
+            <a href="{{ url_for('componentes') }}">COMPONENTES</a>
+            <a href="{{ url_for('robokids') }}">ROBOKIDS</a>
+            {% if session.user_name %}
+                <span>Bienvenido, {{ session.user_name }}</span>
+                <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Iniciar Sesión</a>
+                <a href="{{ url_for('registro') }}">Registrarse</a>
+            {% endif %}
+        </nav>
+        <div class="menu-icon">
+            <a href="{{ url_for('menu') }}">☰</a>
+        </div>
+    </header>
+
+    <div class="register-container">
+        <h2>Registrarse</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="POST" action="{{ url_for('registro') }}">
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="text" name="apellido" placeholder="Apellido" required>
+            <input type="email" name="email" placeholder="Correo electrónico" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Registrarse</button>
         </form>
-        <p class="text-center text-custom-blue mt-4">¿YA TIENES CUENTA? <a href="{{ url_for('login') }}" class="text-[#5a4fc2] hover:underline">INICIA SESIÓN</a></p>
-        <a class="a1" href="/inicio"> regresar al inicio </a>
+        <div class="login-link">
+            <p>¿Ya tienes cuenta? <a href="{{ url_for('login') }}">Inicia sesión aquí</a></p>
+        </div>
     </div>
+
+    {% include 'footer.html' %}
 </body>
 </html>

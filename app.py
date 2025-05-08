@@ -1,149 +1,46 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import sqlite3
-from db import init_db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = 'mi_clave_secreta'
+app.secret_key = 'your_secret_key'
 
-init_db()
-
-def conectar_db():
-    try:
-        conn = sqlite3.connect('tienda.db')
-        return conn
-    except sqlite3.Error as e:
-        print(f"Error al conectar a la base de datos: {e}")
-        return None
+def get_db_connection():
+    conn = sqlite3.connect('tienda.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 @app.route('/')
 def index():
-    conn = conectar_db()
-    if conn is None:
-        return "Error: No se pudo conectar a la base de datos.", 500
-    try:
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM productos")
-        productos = cursor.fetchall()
-    except sqlite3.Error as e:
-        print(f"Error al ejecutar la consulta: {e}")
-        return "Error: No se pudo obtener los productos.", 500
-    finally:
-        conn.close()
+    return redirect(url_for('inicio'))
+
+@app.route('/inicio')
+def inicio():
+    conn = sqlite3.connect('tienda.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM productos')
+    productos = cursor.fetchall()
+    conn.close()
     return render_template('principal.html', productos=productos)
-
-@app.route('/buscar', methods=['GET'])
-def buscar():
-    query = request.args.get('query', '')
-    conn = conectar_db()
-    if conn is None:
-        return "Error: No se pudo conectar a la base de datos.", 500
-    try:
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM productos WHERE nombre LIKE ?", ('%' + query + '%',))
-        productos = cursor.fetchall()
-    except sqlite3.Error as e:
-        print(f"Error al ejecutar la consulta: {e}")
-        return "Error: No se pudo buscar productos.", 500
-    finally:
-        conn.close()
-    return render_template('principal.html', productos=productos)
-
-@app.route('/producto/<int:producto_id>')
-def ver_producto(producto_id):
-    conn = conectar_db()
-    if conn is None:
-        return "Error: No se pudo conectar a la base de datos.", 500
-    try:
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM productos WHERE id = ?", (producto_id,))
-        producto = cursor.fetchone()
-        if producto is None:
-            return "Producto no encontrado", 404
-    except sqlite3.Error as e:
-        print(f"Error al ejecutar la consulta: {e}")
-        return "Error al obtener el producto.", 500
-    finally:
-        conn.close()
-    return render_template('ver_producto.html', producto=producto)
-
-@app.route('/agregar_carrito/<int:producto_id>', methods=['POST'])
-def agregar_carrito(producto_id):
-    if 'carrito' not in session:
-        session['carrito'] = []
-
-    conn = conectar_db()
-    if conn is None:
-        return "Error: No se pudo conectar a la base de datos.", 500
-
-    try:
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM productos WHERE id = ?", (producto_id,))
-        producto = cursor.fetchone()
-        if producto is None:
-            return "Producto no encontrado", 404
-        
-        # Verificar si el producto ya está en el carrito
-        carrito = session['carrito']
-        for item in carrito:
-            if item['id'] == producto_id:
-                item['cantidad'] += 1
-                session.modified = True
-                conn.close()
-                return redirect(url_for('ver_carrito'))
-
-        # Si no está, añadirlo
-        carrito.append({
-            'id': producto[0],
-            'nombre': producto[1],
-            'precio': producto[3],
-            'cantidad': 1
-        })
-        session['carrito'] = carrito
-        session.modified = True
-    except sqlite3.Error as e:
-        print(f"Error al ejecutar la consulta: {e}")
-        return "Error al agregar al carrito.", 500
-    finally:
-        conn.close()
-
-    return redirect(url_for('ver_carrito'))
-
-@app.route('/eliminar_del_carrito/<int:producto_id>', methods=['POST'])
-def eliminar_del_carrito(producto_id):
-    if 'carrito' in session:
-        carrito = session['carrito']
-        session['carrito'] = [item for item in carrito if item['id'] != producto_id]
-        session.modified = True
-    return redirect(url_for('ver_carrito'))
-
-@app.route('/carrito', methods=['GET'])
-def ver_carrito():
-    carrito = session.get('carrito', [])
-    total = sum(item['precio'] * item['cantidad'] for item in carrito)
-    return render_template('carrito.html', carrito=carrito, total=total)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        correo = request.form['correo']
-        contraseña = request.form['contraseña']
-        conn = conectar_db()
-        if conn is None:
-            return "Error: No se pudo conectar a la base de datos.", 500
-        try:
-            cursor = conn.cursor()
-            cursor.execute("SELECT contraseña FROM usuarios WHERE correo = ?", (correo,))
-            result = cursor.fetchone()
-            if result and check_password_hash(result[0], contraseña):
-                return redirect(url_for('index'))
-            else:
-                return "Correo o contraseña incorrectos.", 401
-        except sqlite3.Error as e:
-            print(f"Error al verificar usuario: {e}")
-            return "Error: No se pudo verificar el usuario.", 500
-        finally:
-            conn.close()
+        email = request.form['email']
+        password = request.form['password']
+        
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
+        conn.close()
+        
+        if user and check_password_hash(user['password'], password):
+            session['user_id'] = user['id']
+            session['user_name'] = user['nombre']
+            flash('Inicio de sesión exitoso', 'success')
+            return redirect(url_for('inicio'))
+        else:
+            flash('Correo o contraseña incorrectos', 'danger')
+    
     return render_template('login.html')
 
 @app.route('/registro', methods=['GET', 'POST'])
@@ -151,50 +48,141 @@ def registro():
     if request.method == 'POST':
         nombre = request.form['nombre']
         apellido = request.form['apellido']
-        correo = request.form['correo']
-        contraseña = generate_password_hash(request.form['contraseña'], method='pbkdf2:sha256')
-        conn = conectar_db()
-        if conn is None:
-            return "Error: No se pudo conectar a la base de datos.", 500
+        email = request.form['email']
+        password = request.form['password']
+        
+        conn = get_db_connection()
         try:
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO usuarios (nombre, apellido, correo, contraseña) VALUES (?, ?, ?, ?)",
-                          (nombre, apellido, correo, contraseña))
+            hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+            conn.execute('INSERT INTO users (nombre, apellido, email, password) VALUES (?, ?, ?, ?)',
+                        (nombre, apellido, email, hashed_password))
             conn.commit()
+            flash('Registro exitoso. Por favor, inicia sesión.', 'success')
+            return redirect(url_for('login'))
         except sqlite3.IntegrityError:
-            return "Error: El correo ya está registrado.", 400
-        except sqlite3.Error as e:
-            print(f"Error al registrar usuario: {e}")
-            return "Error: No se pudo registrar el usuario.", 500
+            flash('El correo ya está registrado', 'danger')
         finally:
             conn.close()
-        return redirect(url_for('index'))
+    
     return render_template('registro.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    session.pop('user_name', None)
+    flash('Has cerrado sesión', 'success')
+    return redirect(url_for('inicio'))
+
+@app.route('/producto/<int:producto_id>')
+def ver_producto(producto_id):
+    conn = sqlite3.connect('tienda.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM productos WHERE id = ?', (producto_id,))
+    producto = cursor.fetchone()
+    conn.close()
+    return render_template('ver_producto.html', producto=producto)
+
+@app.route('/agregar_carrito/<int:producto_id>', methods=['POST'])
+def agregar_carrito(producto_id):
+    if 'user_name' not in session:
+        flash('Por favor, inicia sesión para añadir productos al carrito', 'danger')
+        return redirect(url_for('login'))
+    
+    conn = sqlite3.connect('tienda.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM productos WHERE id = ?', (producto_id,))
+    producto = cursor.fetchone()
+    conn.close()
+    
+    if producto:
+        carrito = session.get('carrito', [])
+        for item in carrito:
+            if item['id'] == producto_id:
+                item['cantidad'] += 1
+                break
+        else:
+            carrito.append({
+                'id': producto_id,
+                'nombre': producto[1],
+                'precio': producto[3],
+                'cantidad': 1
+            })
+        session['carrito'] = carrito
+        flash('Producto añadido al carrito', 'success')
+    
+    return redirect(url_for('ver_producto', producto_id=producto_id))
+
+@app.route('/carrito', methods=['GET'])
+def ver_carrito():
+    if 'user_name' not in session:
+        flash('Por favor, inicia sesión para ver el carrito', 'danger')
+        return redirect(url_for('login'))
+    
+    carrito = session.get('carrito', [])
+    total = sum(item['precio'] * item['cantidad'] for item in carrito)
+    return render_template('carrito.html', carrito=carrito, total=total)
+
+@app.route('/eliminar_del_carrito/<int:producto_id>', methods=['POST'])
+def eliminar_del_carrito(producto_id):
+    if 'user_name' not in session:
+        flash('Por favor, inicia sesión para modificar el carrito', 'danger')
+        return redirect(url_for('login'))
+    
+    carrito = session.get('carrito', [])
+    carrito = [item for item in carrito if item['id'] != producto_id]
+    session['carrito'] = carrito
+    flash('Producto eliminado del carrito', 'success')
+    return redirect(url_for('ver_carrito'))
 
 @app.route('/pagar', methods=['POST'])
 def pagar():
-    session.pop('carrito', None)
+    if 'user_name' not in session:
+        flash('Por favor, inicia sesión para realizar el pago', 'danger')
+        return redirect(url_for('login'))
+    
+    session['carrito'] = []
+    flash('Compra realizada con éxito', 'success')
+    return redirect(url_for('pago_completado'))
+
+@app.route('/pago_completado')
+def pago_completado():
     return render_template('pago_completado.html')
 
-@app.route('/inicio')
-def inicio():
-    return render_template('principal.html')
+@app.route('/buscar', methods=['GET'])
+def buscar():
+    query = request.args.get('q', '')
+    conn = sqlite3.connect('tienda.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM productos WHERE nombre LIKE ?', ('%' + query + '%',))
+    productos = cursor.fetchall()
+    conn.close()
+    return render_template('producto_detalle.html', productos=productos, query=query)
+
+@app.route('/componentes')
+def componentes():
+    conn = sqlite3.connect('tienda.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM productos')
+    productos = cursor.fetchall()
+    conn.close()
+    return render_template('componentes.html', productos=productos)
+
+@app.route('/robokids')
+def robokids():
+    conn = sqlite3.connect('tienda.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM productos')
+    productos = cursor.fetchall()
+    conn.close()
+    return render_template('robokids.html', productos=productos)
 
 @app.route('/menu')
 def menu():
     return render_template('menu.html')
 
-@app.route('/componentes')
-def componentes():
-    return render_template('componentes.html')
-
-@app.route('/robokids')
-def robokids():
-    return render_template('robokids.html')
-
-@app.route('/producto_detalle')
-def producto_detalle():
-    return render_template('producto_detalle.html')
+@app.route('/tutoriales')
+def tutoriales():
+    return render_template('tutoriales.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

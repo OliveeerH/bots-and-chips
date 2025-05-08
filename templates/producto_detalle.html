@@ -2,22 +2,107 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{{ producto.nombre }} - Robokids</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+    <title>Bots and Chips - Detalle de Producto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Agrandir', sans-serif;
+            margin: 0;
+            background-color: #C4DBEB;
+            color: #1E486B;
+            padding-top: 80px;
+        }
+        header {
+            background-color: #C4DBEB;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            z-index: 1000;
+        }
+        .logo-header img {
+            height: 60px;
+            width: auto;
+        }
+        .nav-center {
+            display: flex;
+            gap: 2rem;
+            font-weight: bold;
+            color: #1E486B;
+        }
+        .nav-center a, .nav-center span {
+            color: #1E486B;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .nav-center a:hover {
+            color: #AFC9DD;
+        }
+        .menu-icon {
+            font-size: 1.8rem;
+            color: #1E486B;
+            cursor: pointer;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .producto-detalle {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .btn {
+            background-color: #5a4fc2;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #4a3fa2;
+        }
+        @media (max-width: 768px) {
+            .nav-center {
+                display: none;
+            }
+        }
+    </style>
+    <script>
+        function mostrarProductos() {
+            window.location.href = "{{ url_for('inicio') }}";
+        }
+    </script>
 </head>
 <body>
-    <section class="detalle-producto">
-        <div class="detalle-contenido">
-            <div class="detalle-imagen">
-                <img src="{{ url_for('static', filename='img/' + producto.imagen) }}" alt="{{ producto.nombre }}">
-            </div>
-            <div class="detalle-info">
-                <h1>{{ producto.nombre }}</h1>
-                <p class="precio-detalle">${{ producto.precio }}</p>
-                <p>{{ producto.descripcion }}</p>
-                <button class="btn-agregar">Añadir al carrito</button>
-            </div>
+    {% include 'navbar.html' %}
+
+    <div class="container">
+        <h2 class="text-3xl font-bold text-center mb-6">Detalle de Producto</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} p-3 mb-4 rounded-lg text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="producto-detalle">
+            <h3 class="text-2xl font-bold mt-4">Producto de Ejemplo</h3>
+            <p class="mt-2">Descripción del producto.</p>
+            <p class="mt-2 font-bold">$99.99</p>
+            <a href="{{ url_for('inicio') }}" class="btn mt-4">Volver a Inicio</a>
         </div>
-    </section>
+    </div>
 </body>
 </html>

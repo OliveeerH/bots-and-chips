@@ -2,65 +2,199 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Bots and Chips - Iniciar Sesión</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Bots and Chips</title>
     <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
     <style>
         body {
             font-family: 'Agrandir', sans-serif;
+            margin: 0;
             background: linear-gradient(to right, #e6f0fa, #d0e1f9);
+            color: #1E486B;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding-top: 80px;
+            padding-bottom: 80px;
         }
-        .text-custom-blue {
+        header {
+            background-color: #C4DBEB;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            z-index: 1000;
+        }
+        .logo-header img {
+            height: 60px;
+            width: auto;
+        }
+        .nav-center {
+            display: flex;
+            gap: 2rem;
+            font-weight: bold;
             color: #1E486B;
         }
-        .social-login a {
-            font-size: 24px;
-            margin: 0 10px;
+        .nav-center a, .nav-center span {
+            color: #1E486B;
+            text-decoration: none;
+            transition: color 0.3s;
         }
-        .a1 {
-      background-color: white;
-      color: #1E486B;
-      padding: 12px 24px;
-      border-radius: 999px;
-      font-weight: bold;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-
-     .a1:hover {
-      background-color: #AFC9DD;
-    }
+        .nav-center a:hover {
+            color: #AFC9DD;
+        }
+        .menu-icon {
+            font-size: 1.8rem;
+            color: #1E486B;
+            cursor: pointer;
+        }
+        .login-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-container h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #1E486B;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #5a4fc2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .login-container button:hover {
+            background-color: #4a3fa2;
+        }
+        .social-login {
+            margin-top: 1rem;
+        }
+        .social-login p {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        .social-login a {
+            display: inline-block;
+            margin: 0 0.5rem;
+            color: #5a4fc2;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .social-login a:hover {
+            text-decoration: underline;
+        }
+        .register-link {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        .register-link a {
+            color: #5a4fc2;
+            text-decoration: none;
+        }
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        @media (max-width: 768px) {
+            .nav-center {
+                display: none;
+            }
+            .login-container {
+                margin: 20px;
+            }
+        }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
-    <div class="flex flex-col md:flex-row items-center justify-between w-full max-w-4xl p-6">
-        <div class="w-full md:w-1/2">
-            <h2 class="text-3xl font-bold text-custom-blue text-center mb-6">INICIO DE SESIÓN</h2>
-            <form method="POST" class="space-y-4">
-                <div>
-                    <label class="block text-custom-blue font-medium mb-2">CORREO ELECTRÓNICO*</label>
-                    <input type="email" name="correo" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="TU@CORREO.COM">
-                </div>
-                <div>
-                    <label class="block text-custom-blue font-medium mb-2">CONTRASEÑA*</label>
-                    <input type="password" name="contraseña" required class="w-full p-3 bg-white rounded-lg border-none focus:outline-none" placeholder="CONTRASEÑA123">
-                </div>
-                <p class="text-custom-blue text-sm mb-4">*CAMPOS OBLIGATORIOS</p>
-                <button type="submit" class="w-full bg-[#5a4fc2] text-white p-3 rounded-lg hover:bg-[#4a3fa2] transition">INICIA SESIÓN</button>
-            </form>
-            <p class="text-center text-custom-blue mt-4">¿AÚN NO TIENES CUENTA? <a href="{{ url_for('registro') }}" class="text-[#5a4fc2] hover:underline">REGÍSTRATE</a></p>
+<body>
+    <header id="header">
+        <div class="logo-header">
+            <a href="{{ url_for('inicio') }}">
+                <img src="{{ url_for('static', filename='img/bots_and_chips2.png') }}" alt="Logo">
+            </a>
         </div>
-        <div class="w-full md:w-1/2 mt-6 md:mt-0 text-center">
-            <p class="text-custom-blue mb-4">O TAMBIÉN INICIA SESIÓN CON</p>
-            <div class="flex justify-center space-x-4 social-login">
-                <a href="#" class="text-custom-blue">Instagram</a>
-                <a href="#" class="text-custom-blue">Google</a>
-                <a href="#" class="text-custom-blue">Facebook</a>
-            </div>
+        <nav class="nav-center">
+            <a href="javascript:void(0)" onclick="mostrarProductos()">POPULAR</a>
+            <a href="{{ url_for('componentes') }}">COMPONENTES</a>
+            <a href="{{ url_for('robokids') }}">ROBOKIDS</a>
+            {% if session.user_name %}
+                <span>Bienvenido, {{ session.user_name }}</span>
+                <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Iniciar Sesión</a>
+                <a href="{{ url_for('registro') }}">Registrarse</a>
+            {% endif %}
+        </nav>
+        <div class="menu-icon">
+            <a href="{{ url_for('menu') }}">☰</a>
+        </div>
+    </header>
+
+    <div class="login-container">
+        <h2>Iniciar Sesión</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="POST" action="{{ url_for('login') }}">
+            <input type="email" name="email" placeholder="Correo electrónico" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+        <div class="social-login">
+            <p>O inicia sesión con:</p>
+            <a href="#">Google</a>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+        </div>
+        <div class="register-link">
+            <p>¿No tienes cuenta? <a href="{{ url_for('registro') }}">Regístrate aquí</a></p>
         </div>
     </div>
-    <a class="a1" href="/inicio"> regresar al inicio </a>
+
+    {% include 'footer.html' %}
 </body>
 </html>
