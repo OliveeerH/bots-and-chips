@@ -16,7 +16,7 @@ def index():
 
 @app.route('/inicio')
 def inicio():
-    conn = sqlite3.connect('tienda.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM productos')
     productos = cursor.fetchall()
@@ -26,14 +26,14 @@ def inicio():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form['email'].strip()
+        password = request.form['password'].strip()
         
         conn = get_db_connection()
-        user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
+        user = conn.execute('SELECT * FROM usuarios WHERE email = ?', (email,)).fetchone()
         conn.close()
         
-        if user and check_password_hash(user['password'], password):
+        if user and check_password_hash(user['contraseña'], password):
             session['user_id'] = user['id']
             session['user_name'] = user['nombre']
             flash('Inicio de sesión exitoso', 'success')
@@ -46,21 +46,30 @@ def login():
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
-        nombre = request.form['nombre']
-        apellido = request.form['apellido']
-        email = request.form['email']
-        password = request.form['password']
-        
+        nombre = request.form.get('nombre', '').strip()
+        apellido = request.form.get('apellido', '').strip()
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '').strip()
+
+        # Validación básica
+        if not nombre or not email or not password:
+            flash('Todos los campos son obligatorios.', 'danger')
+            return redirect(url_for('registro'))
+
         conn = get_db_connection()
         try:
             hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-            conn.execute('INSERT INTO users (nombre, apellido, email, password) VALUES (?, ?, ?, ?)',
+            conn.execute('INSERT INTO usuarios (nombre, apellido, email, contraseña) VALUES (?, ?, ?, ?)',
                         (nombre, apellido, email, hashed_password))
             conn.commit()
             flash('Registro exitoso. Por favor, inicia sesión.', 'success')
             return redirect(url_for('login'))
         except sqlite3.IntegrityError:
-            flash('El correo ya está registrado', 'danger')
+            flash('El correo ya está registrado.', 'danger')
+            return redirect(url_for('registro'))
+        except sqlite3.Error as e:
+            flash(f'Error al registrar usuario: {e}', 'danger')
+            return redirect(url_for('registro'))
         finally:
             conn.close()
     
@@ -70,12 +79,12 @@ def registro():
 def logout():
     session.pop('user_id', None)
     session.pop('user_name', None)
-    flash('Has cerrado sesión', 'success')
+    flash('Has cerrado sesión.', 'success')
     return redirect(url_for('inicio'))
 
 @app.route('/producto/<int:producto_id>')
 def ver_producto(producto_id):
-    conn = sqlite3.connect('tienda.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM productos WHERE id = ?', (producto_id,))
     producto = cursor.fetchone()
@@ -84,11 +93,11 @@ def ver_producto(producto_id):
 
 @app.route('/agregar_carrito/<int:producto_id>', methods=['POST'])
 def agregar_carrito(producto_id):
-    if 'user_name' not in session:
-        flash('Por favor, inicia sesión para añadir productos al carrito', 'danger')
+    if 'user_id' not in session:
+        flash('Por favor, inicia sesión para añadir productos al carrito.', 'danger')
         return redirect(url_for('login'))
     
-    conn = sqlite3.connect('tienda.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM productos WHERE id = ?', (producto_id,))
     producto = cursor.fetchone()
@@ -108,14 +117,14 @@ def agregar_carrito(producto_id):
                 'cantidad': 1
             })
         session['carrito'] = carrito
-        flash('Producto añadido al carrito', 'success')
+        flash('Producto añadido al carrito.', 'success')
     
     return redirect(url_for('ver_producto', producto_id=producto_id))
 
 @app.route('/carrito', methods=['GET'])
 def ver_carrito():
-    if 'user_name' not in session:
-        flash('Por favor, inicia sesión para ver el carrito', 'danger')
+    if 'user_id' not in session:
+        flash('Por favor, inicia sesión para ver el carrito.', 'danger')
         return redirect(url_for('login'))
     
     carrito = session.get('carrito', [])
@@ -124,24 +133,24 @@ def ver_carrito():
 
 @app.route('/eliminar_del_carrito/<int:producto_id>', methods=['POST'])
 def eliminar_del_carrito(producto_id):
-    if 'user_name' not in session:
-        flash('Por favor, inicia sesión para modificar el carrito', 'danger')
+    if 'user_id' not in session:
+        flash('Por favor, inicia sesión para modificar el carrito.', 'danger')
         return redirect(url_for('login'))
     
     carrito = session.get('carrito', [])
     carrito = [item for item in carrito if item['id'] != producto_id]
     session['carrito'] = carrito
-    flash('Producto eliminado del carrito', 'success')
+    flash('Producto eliminado del carrito.', 'success')
     return redirect(url_for('ver_carrito'))
 
 @app.route('/pagar', methods=['POST'])
 def pagar():
-    if 'user_name' not in session:
-        flash('Por favor, inicia sesión para realizar el pago', 'danger')
+    if 'user_id' not in session:
+        flash('Por favor, inicia sesión para realizar el pago.', 'danger')
         return redirect(url_for('login'))
     
     session['carrito'] = []
-    flash('Compra realizada con éxito', 'success')
+    flash('Compra realizada con éxito.', 'success')
     return redirect(url_for('pago_completado'))
 
 @app.route('/pago_completado')
@@ -151,7 +160,7 @@ def pago_completado():
 @app.route('/buscar', methods=['GET'])
 def buscar():
     query = request.args.get('q', '')
-    conn = sqlite3.connect('tienda.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM productos WHERE nombre LIKE ?', ('%' + query + '%',))
     productos = cursor.fetchall()
@@ -160,7 +169,7 @@ def buscar():
 
 @app.route('/componentes')
 def componentes():
-    conn = sqlite3.connect('tienda.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM productos')
     productos = cursor.fetchall()
@@ -169,7 +178,7 @@ def componentes():
 
 @app.route('/robokids')
 def robokids():
-    conn = sqlite3.connect('tienda.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM productos')
     productos = cursor.fetchall()

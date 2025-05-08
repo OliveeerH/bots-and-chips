@@ -12,7 +12,7 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre TEXT NOT NULL,
             apellido TEXT,
-            correo TEXT NOT NULL UNIQUE,
+            email TEXT NOT NULL UNIQUE,
             contraseña TEXT NOT NULL
         )
     ''')
