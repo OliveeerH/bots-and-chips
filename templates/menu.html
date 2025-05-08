@@ -85,6 +85,7 @@
             padding: 10px;
             margin-bottom: 20px;
             border-radius: 5px;
+            text-align: center;
         }
         .alert-success {
             background-color: #d4edda;
@@ -94,4 +95,52 @@
             background-color: #f8d7da;
             color: #721c24;
         }
+        @media (max-width: 768px) {
+            .nav-center {
+                display: none;
+            }
+            .menu-container {
+                margin: 20px;
+            }
+        }
+    </style>
+    <script>
+        function mostrarProductos() {
+            window.location.href = "{{ url_for('inicio') }}";
+        }
+    </script>
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="menu-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <h2>Menú</h2>
+        <div class="menu-options">
+            <a href="{{ url_for('inicio') }}" onclick="mostrarProductos()">Popular</a>
+            <a href="{{ url_for('componentes') }}">Componentes</a>
+            <a href="{{ url_for('robokids') }}">Robokids</a>
+            <a href="{{ url_for('tutoriales') }}">Tutoriales</a>
+            <a href="{{ url_for('ver_carrito') }}">Carrito</a>
+            {% if session.user_name %}
+                <a href="{{ url_for('logout') }}">Cerrar Sesión ({{ session.user_name }})</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Iniciar Sesión</a>
+                <a href="{{ url_for('registro') }}">Registrarse</a>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('inicio') }}" style="display: inline-block; margin-top: 20px; color: #5a4fc2; text-decoration: none;">Volver a la página principal</a>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>
       
