@@ -6,18 +6,18 @@
     <title>Menú - Bots and Chips</title>
     <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
         body {
             font-family: 'Agrandir', sans-serif;
-            margin: 0;
             background: linear-gradient(to right, #e6f0fa, #d0e1f9);
             color: #1E486B;
             padding-top: 80px;
-            padding-bottom: 80px;
+            margin: 0;
         }
+
         header {
-            background-color: #C4DBEB;
+            background-color: #1E486B;
             position: fixed;
             top: 0;
             left: 0;
@@ -27,92 +27,150 @@
             align-items: center;
             padding: 1rem 2rem;
             z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        .logo-header {
+            display: inline-block;
+        }
+
         .logo-header img {
-            height: 60px;
-            width: auto;
+            height: 50px;
         }
+
         .nav-center {
             display: flex;
             gap: 2rem;
             font-weight: bold;
-            color: #1E486B;
+            color: white;
         }
-        .nav-center a, .nav-center span {
-            color: #1E486B;
+
+        .nav-center a {
+            color: white;
             text-decoration: none;
             transition: color 0.3s;
         }
+
         .nav-center a:hover {
             color: #AFC9DD;
         }
-        .menu-icon {
-            font-size: 1.8rem;
-            color: #1E486B;
-            cursor: pointer;
-        }
+
         .menu-container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
             text-align: center;
         }
+
         .menu-container h2 {
-            font-size: 2rem;
-            color: #1E486B;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
         }
-        .menu-options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+
+        .grid-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
         }
-        .menu-options a {
-            color: #5a4fc2;
+
+        .menu-item {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.07);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-decoration: none;
-            font-size: 1.2rem;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            color: #1E486B;
         }
-        .menu-options a:hover {
-            background-color: #e6f0fa;
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.1);
         }
+
+        .menu-item i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #5a4fc2;
+        }
+
+        .menu-item span {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
         .alert {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 600px;
             padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             text-align: center;
         }
+
         .alert-success {
             background-color: #d4edda;
             color: #155724;
         }
+
         .alert-danger {
             background-color: #f8d7da;
             color: #721c24;
         }
-        @media (max-width: 768px) {
-            .nav-center {
-                display: none;
-            }
-            .menu-container {
-                margin: 20px;
+
+        .volver-link {
+            margin-top: 30px;
+            display: inline-block;
+            text-decoration: none;
+            font-weight: bold;
+            color: #1E486B;
+            transition: color 0.3s;
+        }
+
+        .volver-link:hover {
+            color: #5a4fc2;
+        }
+
+        @media (max-width: 640px) {
+            .menu-container h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
-    <script>
-        function mostrarProductos() {
-            window.location.href = "{{ url_for('inicio') }}";
-        }
-    </script>
 </head>
 <body>
-    {% include 'navbar.html' %}
 
+    <!-- Navbar -->
+    <header>
+        {% if request.endpoint != 'menu' %}
+        <div class="logo-header">
+            <a href="{{ url_for('inicio') }}">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Bots and Chips">
+            </a>
+        </div>
+        {% endif %}
+
+        <nav class="nav-center">
+            <a href="{{ url_for('inicio') }}">Inicio</a>
+            <a href="{{ url_for('componentes') }}">Componentes</a>
+            <a href="{{ url_for('robokids') }}">Robokids</a>
+            <a href="{{ url_for('tutoriales') }}">Tutoriales</a>
+            <a href="{{ url_for('menu') }}">Menú</a>
+
+            {% if session.user_name %}
+                <span>Hola, {{ session.user_name }}</span>
+                <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Iniciar Sesión</a>
+                <a href="{{ url_for('registro') }}">Registrarse</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <!-- Menú -->
     <div class="menu-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -123,24 +181,25 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        <h2>Menú</h2>
-        <div class="menu-options">
-            <a href="{{ url_for('inicio') }}" onclick="mostrarProductos()">Popular</a>
-            <a href="{{ url_for('componentes') }}">Componentes</a>
-            <a href="{{ url_for('robokids') }}">Robokids</a>
-            <a href="{{ url_for('tutoriales') }}">Tutoriales</a>
-            <a href="{{ url_for('ver_carrito') }}">Carrito</a>
+
+        <h2>Explora Bots and Chips</h2>
+        <div class="grid-menu">
+            <a href="{{ url_for('inicio') }}" class="menu-item"><i class="fas fa-rocket"></i><span>Popular</span></a>
+            <a href="{{ url_for('componentes') }}" class="menu-item"><i class="fas fa-microchip"></i><span>Componentes</span></a>
+            <a href="{{ url_for('robokids') }}" class="menu-item"><i class="fas fa-child"></i><span>Robokids</span></a>
+            <a href="{{ url_for('tutoriales') }}" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Tutoriales</span></a>
+            <a href="{{ url_for('ver_carrito') }}" class="menu-item"><i class="fas fa-shopping-cart"></i><span>Carrito</span></a>
             {% if session.user_name %}
-                <a href="{{ url_for('logout') }}">Cerrar Sesión ({{ session.user_name }})</a>
+                <a href="{{ url_for('logout') }}" class="menu-item"><i class="fas fa-sign-out-alt"></i><span>Cerrar sesión ({{ session.user_name }})</span></a>
             {% else %}
-                <a href="{{ url_for('login') }}">Iniciar Sesión</a>
-                <a href="{{ url_for('registro') }}">Registrarse</a>
+                <a href="{{ url_for('login') }}" class="menu-item"><i class="fas fa-sign-in-alt"></i><span>Iniciar sesión</span></a>
+                <a href="{{ url_for('registro') }}" class="menu-item"><i class="fas fa-user-plus"></i><span>Registrarse</span></a>
             {% endif %}
         </div>
-        <a href="{{ url_for('inicio') }}" style="display: inline-block; margin-top: 20px; color: #5a4fc2; text-decoration: none;">Volver a la página principal</a>
+
+        <a href="{{ url_for('inicio') }}" class="volver-link">← Volver a la página principal</a>
     </div>
 
     {% include 'footer.html' %}
 </body>
 </html>
-      
