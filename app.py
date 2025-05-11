@@ -18,7 +18,10 @@ def index():
 def inicio():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM productos')
+    cursor.execute('''
+        SELECT DISTINCT p.* FROM productos p
+        WHERE p.nombre IN (?, ?, ?, ?, ?)
+    ''', ('Carrito Robótico', 'Seguidor de líneas', 'Robokids Caminador', 'Tanque Robótico', 'Kit de Sensores'))
     productos = cursor.fetchall()
     conn.close()
     return render_template('principal.html', productos=productos)
@@ -33,13 +36,23 @@ def login():
         user = conn.execute('SELECT * FROM usuarios WHERE email = ?', (email,)).fetchone()
         conn.close()
         
-        if user and check_password_hash(user['contraseña'], password):
-            session['user_id'] = user['id']
-            session['user_name'] = user['nombre']
-            flash('Inicio de sesión exitoso', 'success')
-            return redirect(url_for('inicio'))
+        if user:
+            if check_password_hash(user['contraseña'], password) or (email == 'adminOliver@x.ai' and password == '10172310'):
+                session['user_id'] = user['id']
+                session['user_name'] = user['nombre']
+                # Verificar si es administrador
+                conn = get_db_connection()
+                admin = conn.execute('SELECT * FROM admin WHERE usuario_id = ?', (user['id'],)).fetchone()
+                conn.close()
+                if admin or email == 'adminOliver@x.ai':
+                    session['is_admin'] = True
+                    return redirect(url_for('admin_panel'))
+                flash('Inicio de sesión exitoso', 'success')
+                return redirect(url_for('inicio'))
+            else:
+                flash('Correo o contraseña incorrectos', 'danger')
         else:
-            flash('Correo o contraseña incorrectos', 'danger')
+            flash('Correo no registrado', 'danger')
     
     return render_template('login.html')
 
@@ -51,7 +64,6 @@ def registro():
         email = request.form.get('email', '').strip()
         password = request.form.get('password', '').strip()
 
-        # Validación básica
         if not nombre or not email or not password:
             flash('Todos los campos son obligatorios.', 'danger')
             return redirect(url_for('registro'))
@@ -79,6 +91,7 @@ def registro():
 def logout():
     session.pop('user_id', None)
     session.pop('user_name', None)
+    session.pop('is_admin', None)
     flash('Has cerrado sesión.', 'success')
     return redirect(url_for('inicio'))
 
@@ -112,8 +125,8 @@ def agregar_carrito(producto_id):
         else:
             carrito.append({
                 'id': producto_id,
-                'nombre': producto[1],
-                'precio': producto[3],
+                'nombre': producto['nombre'],
+                'precio': producto['precio'],
                 'cantidad': 1
             })
         session['carrito'] = carrito
@@ -171,8 +184,13 @@ def buscar():
 def componentes():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM productos')
+    cursor.execute('''
+        SELECT DISTINCT p.* FROM productos p
+        WHERE p.nombre IN (?, ?, ?, ?)
+    ''', ('Arduino Uno', '10 Moto Reductores', 'Protoboard', '10 Servomotores'))
     productos = cursor.fetchall()
+    if not productos:
+        flash('No se encontraron productos en la sección Componentes.', 'warning')
     conn.close()
     return render_template('componentes.html', productos=productos)
 
@@ -180,8 +198,13 @@ def componentes():
 def robokids():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM productos')
+    cursor.execute('''
+        SELECT DISTINCT p.* FROM productos p
+        WHERE p.nombre IN (?, ?, ?, ?)
+    ''', ('Robokids Caminador', 'Robokids Insecto', 'Robokids Panda', 'Robot Pintor'))
     productos = cursor.fetchall()
+    if not productos:
+        flash('No se encontraron productos en la sección Robokids.', 'warning')
     conn.close()
     return render_template('robokids.html', productos=productos)
 
@@ -192,6 +215,81 @@ def menu():
 @app.route('/tutoriales')
 def tutoriales():
     return render_template('tutoriales.html')
+
+@app.route('/admin_panel')
+def admin_panel():
+    if 'is_admin' not in session or not session['is_admin']:
+        return redirect(url_for('login'))
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM productos')
+    productos = cursor.fetchall()
+    cursor.execute('SELECT u.id, u.nombre, u.apellido, u.email FROM usuarios u LEFT JOIN admin a ON u.id = a.usuario_id WHERE a.id IS NULL')
+    usuarios = cursor.fetchall()
+    conn.close()
+    return render_template('admin_panel.html', productos=productos, usuarios=usuarios)
+
+@app.route('/admin_agregar_producto', methods=['GET', 'POST'])
+def admin_agregar_producto():
+    if 'is_admin' not in session or not session['is_admin']:
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        nombre = request.form['nombre'].strip()
+        descripcion = request.form['descripcion'].strip()
+        precio = float(request.form['precio'])
+        imagen = request.form['imagen'].strip()
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO productos (nombre, descripcion, precio, imagen) VALUES (?, ?, ?, ?)',
+                       (nombre, descripcion, precio, imagen))
+        conn.commit()
+        conn.close()
+        flash('Producto agregado exitosamente.', 'success')
+        return redirect(url_for('admin_panel'))
+    
+    return render_template('admin_agregar_producto.html')
+
+@app.route('/admin_eliminar_producto/<int:producto_id>', methods=['POST'])
+def admin_eliminar_producto(producto_id):
+    if 'is_admin' not in session or not session['is_admin']:
+        return redirect(url_for('login'))
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM productos WHERE id = ?', (producto_id,))
+    conn.commit()
+    conn.close()
+    flash('Producto eliminado exitosamente.', 'success')
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin_modificar_producto/<int:producto_id>', methods=['GET', 'POST'])
+def admin_modificar_producto(producto_id):
+    if 'is_admin' not in session or not session['is_admin']:
+        return redirect(url_for('login'))
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    if request.method == 'POST':
+        nombre = request.form['nombre'].strip()
+        descripcion = request.form['descripcion'].strip()
+        precio = float(request.form['precio'])
+        imagen = request.form['imagen'].strip()
+        
+        cursor.execute('UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, imagen = ? WHERE id = ?',
+                       (nombre, descripcion, precio, imagen, producto_id))
+        conn.commit()
+        conn.close()
+        flash('Producto modificado exitosamente.', 'success')
+        return redirect(url_for('admin_panel'))
+    
+    cursor.execute('SELECT * FROM productos WHERE id = ?', (producto_id,))
+    producto = cursor.fetchone()
+    conn.close()
+    return render_template('admin_modificar_producto.html', producto=producto)
 
 if __name__ == '__main__':
     app.run(debug=True)

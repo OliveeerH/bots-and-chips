@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Bots and Chips</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Agrandir', sans-serif;
+            background: linear-gradient(to right, #e6f0fa, #d0e1f9);
+            margin: 0;
+            padding: 20px;
+        }
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .admin-container h2 {
+            color: #1E486B;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #C4DBEB;
+            color: #1E486B;
+        }
+        .btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #fff;
+            margin-right: 5px;
+        }
+        .btn-agregar {
+            background-color: #5a4fc2;
+        }
+        .btn-agregar:hover {
+            background-color: #4a3fa2;
+        }
+        .btn-eliminar {
+            background-color: #dc3545;
+        }
+        .btn-eliminar:hover {
+            background-color: #c82333;
+        }
+        .btn-modificar {
+            background-color: #28a745;
+        }
+        .btn-modificar:hover {
+            background-color: #218838;
+        }
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <h2>Panel de Administración</h2>
+        <a href="{{ url_for('admin_agregar_producto') }}" class="btn btn-agregar">Agregar Producto</a>
+        <h3>Productos</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Imagen</th>
+                <th>Acciones</th>
+            </tr>
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto['id'] }}</td>
+                <td>{{ producto['nombre'] }}</td>
+                <td>{{ producto['descripcion'] }}</td>
+                <td>${{ producto['precio'] }}</td>
+                <td>{{ producto['imagen'] }}</td>
+                <td>
+                    <form action="{{ url_for('admin_eliminar_producto', producto_id=producto['id']) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-eliminar">Eliminar</button>
+                    </form>
+                    <a href="{{ url_for('admin_modificar_producto', producto_id=producto['id']) }}" class="btn btn-modificar">Modificar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <h3>Usuarios Registrados</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+            </tr>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario['id'] }}</td>
+                <td>{{ usuario['nombre'] }}</td>
+                <td>{{ usuario['apellido'] or 'N/A' }}</td>
+                <td>{{ usuario['email'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="{{ url_for('logout') }}" class="btn btn-agregar" style="margin-top: 20px; display: inline-block;">Cerrar Sesión</a>
+    </div>
+</body>
+</html>

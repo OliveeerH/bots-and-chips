@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ producto[1] }} - Bots and Chips</title>
+    <title>{{ producto['nombre'] }} - Bots and Chips</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
@@ -157,20 +157,15 @@
             {% endif %}
         {% endwith %}
         {% if producto %}
-            <h1 class="titulo-producto">{{ producto[1] }}</h1>
+            <h1 class="titulo-producto">{{ producto['nombre'] }}</h1>
             <div class="detalles-producto">
                 <div class="imagen-producto">
-                    <img src="{{ url_for('static', filename='img/' + 
-                        ('robokids-caminador.png' if producto[1] == 'Robokids Caminador' else
-                        'carrito_robotico.png' if producto[1] == 'Carrito Robótico' else
-                        'seguidor_de_linea.png' if producto[1] == 'Seguidor de líneas' else
-                        'tanque_robotico.png' if producto[1] == 'Tanque Robótico' else
-                        producto[4])) }}" alt="{{ producto[1] }}" class="producto-imagen">
+                    <img src="{{ url_for('static', filename='img/' + (producto['imagen'] if producto['imagen'].endswith(('.png', '.jpg')) else producto['imagen'] + ('.jpg' if producto['nombre'] in ['Arduino Uno', 'Protoboard', '10 Servomotores'] else '.png'))) }}" alt="{{ producto['nombre'] }}" class="producto-imagen">
                 </div>
                 <div class="info-producto">
-                    <p class="descripcion">{{ producto[2] }}</p>
-                    <p class="precio">Precio: ${{ producto[3] }}</p>
-                    <form action="{{ url_for('agregar_carrito', producto_id=producto[0]) }}" method="POST">
+                    <p class="descripcion">{{ producto['descripcion'] }}</p>
+                    <p class="precio">Precio: ${{ producto['precio'] }}</p>
+                    <form action="{{ url_for('agregar_carrito', producto_id=producto['id']) }}" method="POST">
                         <button type="submit" class="btn-agregar">Añadir al carrito</button>
                     </form>
                 </div>

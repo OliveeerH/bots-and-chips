@@ -111,6 +111,10 @@
             background-color: #f8d7da;
             color: #721c24;
         }
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
         @media (max-width: 768px) {
             .nav-center {
                 display: none;
@@ -133,7 +137,7 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} text-center">
+                    <div class="alert alert-{{ category }} text-center">
                         {{ message }}
                     </div>
                 {% endfor %}
@@ -141,22 +145,18 @@
         {% endwith %}
         <h2>Robokids</h2>
         <div class="productos-lista">
-            {% for producto in productos %}
-                {% if producto[1] != 'Kit de Sensores' %}
+            {% if productos %}
+                {% for producto in productos %}
                     <div class="producto-item">
-                        <img src="{{ url_for('static', filename='img/' + 
-                            ('robokids-caminador.png' if producto[1] == 'Robokids Caminador' else
-                            'carrito_robotico.png' if producto[1] == 'Carrito Robótico' else
-                            'seguidor_de_linea.png' if producto[1] == 'Seguidor de líneas' else
-                            'tanque_robotico.png' if producto[1] == 'Tanque Robótico' else
-                            producto[4])) }}" alt="{{ producto[1] }}">
-                        <h3>{{ producto[1] }}</h3>
-                        <p>{{ producto[2] }}</p>
-                        <p>${{ producto[3] }}</p>
-                        <a href="{{ url_for('ver_producto', producto_id=producto[0]) }}" class="btn-ver-producto">Ver Producto</a>
+                        <img src="{{ url_for('static', filename='img/' + (producto['imagen'] if producto['imagen'].endswith('.png') else producto['imagen'] + '.png')) }}" alt="{{ producto['nombre'] }}">
+                        <h3>{{ producto['nombre'] }}</h3>
+                        <p>${{ producto['precio'] }} MXN</p>
+                        <a href="{{ url_for('ver_producto', producto_id=producto['id']) }}" class="btn-ver-producto">Ver Producto</a>
                     </div>
-                {% endif %}
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <p>No hay productos disponibles en esta sección.</p>
+            {% endif %}
         </div>
         <a href="{{ url_for('inicio') }}" style="display: inline-block; margin-top: 20px; color: #5a4fc2; text-decoration: none;">Volver a la página principal</a>
     </div>
