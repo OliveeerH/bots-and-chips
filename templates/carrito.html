@@ -7,13 +7,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
     <style>
-        body {
+        html, body {
             font-family: 'Agrandir', sans-serif;
             margin: 0;
             background: linear-gradient(to right, #e6f0fa, #d0e1f9);
             color: #1E486B;
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
             padding-top: 80px;
-            padding-bottom: 80px;
+            padding-bottom: 0;
+        }
+        main {
+            flex: 1 0 auto;
         }
         header {
             background-color: #C4DBEB;
@@ -144,38 +153,40 @@
 <body>
     {% include 'navbar.html' %}
 
-    <div class="cart-container">
-        <h2>Tu Carrito</h2>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} text-center">
-                        {{ message }}
+    <main>
+        <div class="cart-container">
+            <h2>Tu Carrito</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} text-center">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% if carrito %}
+                {% for item in carrito %}
+                    <div class="cart-item">
+                        <h4>{{ item['nombre'] }}</h4>
+                        <p class="price">${{ item['precio'] }} x {{ item['cantidad'] }}</p>
+                        <form action="{{ url_for('eliminar_del_carrito', producto_id=item['id']) }}" method="POST">
+                            <button type="submit">Eliminar</button>
+                        </form>
                     </div>
                 {% endfor %}
-            {% endif %}
-        {% endwith %}
-        {% if carrito %}
-            {% for item in carrito %}
-                <div class="cart-item">
-                    <h4>{{ item['nombre'] }}</h4>
-                    <p class="price">${{ item['precio'] }} x {{ item['cantidad'] }}</p>
-                    <form action="{{ url_for('eliminar_del_carrito', producto_id=item['id']) }}" method="POST">
-                        <button type="submit">Eliminar</button>
-                    </form>
+                <div class="total">
+                    Total: ${{ total }}
                 </div>
-            {% endfor %}
-            <div class="total">
-                Total: ${{ total }}
-            </div>
-            <form action="{{ url_for('pagar') }}" method="POST">
-                <button type="submit" class="checkout-btn">Pagar</button>
-            </form>
-        {% else %}
-            <p>Tu carrito está vacío.</p>
-        {% endif %}
-        <a href="{{ url_for('inicio') }}" class="back-link">Volver a la página principal</a>
-    </div>
+                <form action="{{ url_for('pagar') }}" method="POST">
+                    <button type="submit" class="checkout-btn">Pagar</button>
+                </form>
+            {% else %}
+                <p>Tu carrito está vacío.</p>
+            {% endif %}
+            <a href="{{ url_for('inicio') }}" class="back-link">Volver a la página principal</a>
+        </div>
+    </main>
 
     {% include 'footer.html' %}
 </body>

@@ -1,0 +1,25 @@
+<aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-[#C4DBEB] text-[#1E486B] transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-50">
+    <div class="p-4">
+        <div class="logo-header mb-6">
+            <a href="{{ url_for('inicio') }}">
+                <img src="{{ url_for('static', filename='img/bots_and_chips2.png') }}" alt="Logo" class="h-12 w-auto">
+            </a>
+        </div>
+        <nav class="flex flex-col gap-4 font-bold">
+            <a href="javascript:void(0)" onclick="mostrarProductos()" class="hover:text-[#AFC9DD] transition-colors">POPULAR</a>
+            <a href="{{ url_for('componentes') }}" class="hover:text-[#AFC9DD] transition-colors">COMPONENTES</a>
+            <a href="{{ url_for('robokids') }}" class="hover:text-[#AFC9DD] transition-colors">ROBOKIDS</a>
+            <a href="{{ url_for('tutoriales') }}" class="hover:text-[#AFC9DD] transition-colors">TUTORIALES</a>
+            {% if session.user_name %}
+                <span class="text-[#1E486B]">Bienvenido, {{ session.user_name }}</span>
+                {% if session.is_admin %}
+                    <a href="{{ url_for('admin_panel') }}" class="hover:text-[#AFC9DD] transition-colors">ADMIN</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="hover:text-[#AFC9DD] transition-colors">Cerrar Sesión</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="hover:text-[#AFC9DD] transition-colors">Iniciar Sesión</a>
+                <a href="{{ url_for('registro') }}" class="hover:text-[#AFC9DD] transition-colors">Registrarse</a>
+            {% endif %}
+        </nav>
+    </div>
+</aside>

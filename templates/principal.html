@@ -2,18 +2,29 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bots and Chips - Principal</title>
   <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
   <style>
-    body {
+    html, body {
       font-family: 'Agrandir', sans-serif;
       margin: 0;
+      padding: 0;
       background-color: #C4DBEB;
       color: #1E486B;
+      height: 100%;
+      overflow-x: hidden;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
       padding-top: 80px;
-      padding-bottom: 80px;
+      padding-bottom: 0;
+    }
+    main {
+      flex: 1 0 auto;
     }
     header {
       background-color: #C4DBEB;
@@ -54,7 +65,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: calc(100vh - 160px);
       text-align: center;
       padding: 20px;
     }
@@ -209,7 +219,7 @@
       <a href="{{ url_for('login') }}">Iniciar sesión</a>
       <a href="{{ url_for('registro') }}">Registrarse</a>
     {% endif %}
-    <a href="{{ url_for('ver_carrito') }}">Carrito</a>
+    
   </div>
 
   <section id="productos" style="margin-top: 30px;">
@@ -218,7 +228,7 @@
       {% if productos %}
         {% for producto in productos %}
           <div class="producto-item">
-            <img src="{{ url_for('static', filename='img/' + producto['imagen']) }}" alt="{{ producto['nombre'] }}">
+            <img src="{{ url_for('static', filename='img/' + producto['imagen']) }}" alt="{{ producto['nombre'] }}" onerror="this.src='https://via.placeholder.com/100';">
             <h3>{{ producto['nombre'] }}</h3>
             <p>{{ producto['descripcion'] }}</p>
             <p>${{ producto['precio'] }} MXN</p>

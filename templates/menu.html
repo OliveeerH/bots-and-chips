@@ -129,7 +129,7 @@
             <a href="{{ url_for('componentes') }}">Componentes</a>
             <a href="{{ url_for('robokids') }}">Robokids</a>
             <a href="{{ url_for('tutoriales') }}">Tutoriales</a>
-            <a href="{{ url_for('ver_carrito') }}">Carrito</a>
+            <a href="{{ url_for('vercarrito') }}">Carrito</a>
             {% if session.user_name %}
                 <a href="{{ url_for('logout') }}">Cerrar Sesión ({{ session.user_name }})</a>
             {% else %}

@@ -8,13 +8,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.cdnfonts.com/css/agrandir" rel="stylesheet">
     <style>
-        body {
+        html, body {
             font-family: 'Agrandir', sans-serif;
             background: linear-gradient(to right, #e6f0fa, #d0e1f9);
             margin: 0;
             padding: 0;
-            padding-top: 80px;
-            padding-bottom: 80px;
+            height: 100%; /* Asegura que el html ocupe toda la altura */
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Hace que el body crezca al menos al 100% de la ventana */
+            padding-top: 80px; /* Espacio para el header fijo */
+            padding-bottom: 0; /* Elimina padding inferior */
+        }
+        main {
+            flex: 1 0 auto; /* Permite que el contenido principal ocupe el espacio disponible */
         }
         header {
             background-color: #C4DBEB;
@@ -133,33 +142,35 @@
 <body>
     {% include 'navbar.html' %}
 
-    <div class="componentes-container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} text-center">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        <h2>Componentes</h2>
-        <div class="productos-lista">
-            {% if productos %}
-                {% for producto in productos %}
-                    <div class="producto-item">
-                        <img src="{{ url_for('static', filename='img/' + producto['imagen'] + ('.jpg' if producto['nombre'] in ['Arduino Uno', 'Protoboard', '10 Servomotores'] else '.png')) }}" alt="{{ producto['nombre'] }}">
-                        <h3>{{ producto['nombre'] }}</h3>
-                        <p>${{ producto['precio'] }} MXN</p>
-                        <a href="{{ url_for('ver_producto', producto_id=producto['id']) }}" class="btn-ver-producto">Ver Producto</a>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>No hay productos disponibles en esta sección.</p>
-            {% endif %}
+    <main>
+        <div class="componentes-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} text-center">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <h2>Componentes</h2>
+            <div class="productos-lista">
+                {% if productos %}
+                    {% for producto in productos %}
+                        <div class="producto-item">
+                            <img src="{{ url_for('static', filename='img/' + (producto['imagen'] if producto['imagen'].endswith('.jpg') or producto['imagen'].endswith('.png') else producto['imagen'] + ('.jpg' if producto['nombre'] in ['Arduino Uno', 'Protoboard', '10 Servomotores'] else '.png'))) }}" alt="{{ producto['nombre'] }}">
+                            <h3>{{ producto['nombre'] }}</h3>
+                            <p>${{ producto['precio'] }} MXN</p>
+                            <a href="{{ url_for('ver_producto', producto_id=producto['id']) }}" class="btn-ver-producto">Ver Producto</a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No hay productos disponibles en esta sección.</p>
+                {% endif %}
+            </div>
+            <a href="{{ url_for('inicio') }}" style="display: inline-block; margin-top: 20px; color: #5a4fc2; text-decoration: none;">Volver a la página principal</a>
         </div>
-        <a href="{{ url_for('inicio') }}" style="display: inline-block; margin-top: 20px; color: #5a4fc2; text-decoration: none;">Volver a la página principal</a>
-    </div>
+    </main>
 
     {% include 'footer.html' %}
 </body>

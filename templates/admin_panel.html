@@ -26,6 +26,11 @@
             margin-bottom: 20px;
             text-align: center;
         }
+        .section-title {
+            color: #1E486B;
+            margin: 30px 0 10px;
+            font-size: 1.5rem;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -90,7 +95,9 @@
         {% endwith %}
         <h2>Panel de Administración</h2>
         <a href="{{ url_for('admin_agregar_producto') }}" class="btn btn-agregar">Agregar Producto</a>
-        <h3>Productos</h3>
+
+        <!-- Sección Popular -->
+        <h3 class="section-title">Productos - Popular</h3>
         <table>
             <tr>
                 <th>ID</th>
@@ -100,7 +107,7 @@
                 <th>Imagen</th>
                 <th>Acciones</th>
             </tr>
-            {% for producto in productos %}
+            {% for producto in productos_popular %}
             <tr>
                 <td>{{ producto['id'] }}</td>
                 <td>{{ producto['nombre'] }}</td>
@@ -114,9 +121,78 @@
                     <a href="{{ url_for('admin_modificar_producto', producto_id=producto['id']) }}" class="btn btn-modificar">Modificar</a>
                 </td>
             </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No hay productos en esta sección.</td>
+            </tr>
             {% endfor %}
         </table>
-        <h3>Usuarios Registrados</h3>
+
+        <!-- Sección Componentes -->
+        <h3 class="section-title">Productos - Componentes</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Imagen</th>
+                <th>Acciones</th>
+            </tr>
+            {% for producto in productos_componentes %}
+            <tr>
+                <td>{{ producto['id'] }}</td>
+                <td>{{ producto['nombre'] }}</td>
+                <td>{{ producto['descripcion'] }}</td>
+                <td>${{ producto['precio'] }}</td>
+                <td>{{ producto['imagen'] }}</td>
+                <td>
+                    <form action="{{ url_for('admin_eliminar_producto', producto_id=producto['id']) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-eliminar">Eliminar</button>
+                    </form>
+                    <a href="{{ url_for('admin_modificar_producto', producto_id=producto['id']) }}" class="btn btn-modificar">Modificar</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No hay productos en esta sección.</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <!-- Sección Robokids -->
+        <h3 class="section-title">Productos - Robokids</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Imagen</th>
+                <th>Acciones</th>
+            </tr>
+            {% for producto in productos_robokids %}
+            <tr>
+                <td>{{ producto['id'] }}</td>
+                <td>{{ producto['nombre'] }}</td>
+                <td>{{ producto['descripcion'] }}</td>
+                <td>${{ producto['precio'] }}</td>
+                <td>{{ producto['imagen'] }}</td>
+                <td>
+                    <form action="{{ url_for('admin_eliminar_producto', producto_id=producto['id']) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-eliminar">Eliminar</button>
+                    </form>
+                    <a href="{{ url_for('admin_modificar_producto', producto_id=producto['id']) }}" class="btn btn-modificar">Modificar</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No hay productos en esta sección.</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3 class="section-title">Usuarios Registrados</h3>
         <table>
             <tr>
                 <th>ID</th>
@@ -130,6 +206,10 @@
                 <td>{{ usuario['nombre'] }}</td>
                 <td>{{ usuario['apellido'] or 'N/A' }}</td>
                 <td>{{ usuario['email'] }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">No hay usuarios registrados.</td>
             </tr>
             {% endfor %}
         </table>
