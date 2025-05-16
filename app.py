@@ -380,4 +380,4 @@ def admin_modificar_producto(producto_id):
         return redirect(url_for('admin_panel'))
 
 if __name__ == '__main__':
-    app.run(debug=True, port=80, host='0.0.0.0')
+    app.run(debug=True, port=5000, host='0.0.0.0')
