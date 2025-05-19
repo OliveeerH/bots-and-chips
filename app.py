@@ -2,9 +2,13 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+from db import init_db  # Importar init_db desde db.py
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+
+# Inicializar la base de datos al arrancar la aplicación
+init_db()
 
 # Configurar la carpeta para las imágenes
 UPLOAD_FOLDER = 'static/img'
@@ -25,8 +29,7 @@ def inicio():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        # Cargar todos los productos de la categoría "Popular"
-        cursor.execute('SELECT * FROM productos WHERE categoria = ?', ('Popular',))
+        cursor.execute("SELECT * FROM productos WHERE categoria LIKE '%Popular%'")
         productos = cursor.fetchall()
         print("Productos cargados en /inicio:", [(p['id'], p['nombre'], p['imagen'], p['categoria']) for p in productos])
         conn.close()
@@ -51,7 +54,6 @@ def login():
                 if check_password_hash(user['contraseña'], password) or (email == 'adminOliver@x.ai' and password == '10172310'):
                     session['user_id'] = user['id']
                     session['user_name'] = user['nombre']
-                    # Verificar si es administrador
                     conn = get_db_connection()
                     admin = conn.execute('SELECT * FROM admin WHERE usuario_id = ?', (user['id'],)).fetchone()
                     conn.close()
@@ -83,10 +85,12 @@ def registro():
 
         try:
             conn = get_db_connection()
+            cursor = conn.cursor()
             hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-            conn.execute('INSERT INTO usuarios (nombre, apellido, email, contraseña) VALUES (?, ?, ?, ?)',
-                        (nombre, apellido, email, hashed_password))
+            cursor.execute('INSERT INTO usuarios (nombre, apellido, email, contraseña) VALUES (?, ?, ?, ?)',
+                          (nombre, apellido, email, hashed_password))
             conn.commit()
+            print(f"Usuario agregado: {nombre}, {email}")  # Depuración
             conn.close()
             flash('Registro exitoso. Por favor, inicia sesión.', 'success')
             return redirect(url_for('login'))
@@ -95,6 +99,7 @@ def registro():
             return redirect(url_for('registro'))
         except sqlite3.Error as e:
             flash(f'Error al registrar usuario: {str(e)}', 'danger')
+            print(f"Error al registrar usuario: {str(e)}")  # Depuración
             return redirect(url_for('registro'))
     
     return render_template('registro.html')
@@ -208,7 +213,7 @@ def componentes():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM productos WHERE categoria = ?', ('Componentes',))
+        cursor.execute("SELECT * FROM productos WHERE categoria LIKE '%Componentes%'")
         productos = cursor.fetchall()
         if not productos:
             flash('No se encontraron productos en la sección Componentes.', 'warning')
@@ -223,7 +228,7 @@ def robokids():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM productos WHERE categoria = ?', ('Robokids',))
+        cursor.execute("SELECT * FROM productos WHERE categoria LIKE '%Robokids%'")
         productos = cursor.fetchall()
         if not productos:
             flash('No se encontraron productos en la sección Robokids.', 'warning')
@@ -250,15 +255,15 @@ def admin_panel():
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        cursor.execute('SELECT * FROM productos WHERE categoria = ?', ('Popular',))
+        cursor.execute("SELECT * FROM productos WHERE categoria LIKE '%Popular%'")
         productos_popular = cursor.fetchall()
         print("Productos Popular:", [(p['nombre'], p['categoria']) for p in productos_popular])
         
-        cursor.execute('SELECT * FROM productos WHERE categoria = ?', ('Componentes',))
+        cursor.execute("SELECT * FROM productos WHERE categoria LIKE '%Componentes%'")
         productos_componentes = cursor.fetchall()
         print("Productos Componentes:", [(p['nombre'], p['categoria']) for p in productos_componentes])
         
-        cursor.execute('SELECT * FROM productos WHERE categoria = ?', ('Robokids',))
+        cursor.execute("SELECT * FROM productos WHERE categoria LIKE '%Robokids%'")
         productos_robokids = cursor.fetchall()
         print("Productos Robokids:", [(p['nombre'], p['categoria']) for p in productos_robokids])
         
@@ -307,13 +312,15 @@ def admin_agregar_producto():
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute('INSERT INTO productos (nombre, descripcion, precio, imagen, categoria) VALUES (?, ?, ?, ?, ?)',
-                           (nombre, descripcion, precio, imagen, categoria))
+                          (nombre, descripcion, precio, imagen, categoria))
             conn.commit()
+            print(f"Producto agregado: {nombre}, {categoria}")  # Depuración
             conn.close()
             flash('Producto agregado exitosamente.', 'success')
             return redirect(url_for('admin_panel'))
         except sqlite3.Error as e:
             flash(f'Error al agregar producto: {str(e)}', 'danger')
+            print(f"Error al agregar producto: {str(e)}")  # Depuración
             return redirect(url_for('admin_agregar_producto'))
     
     return render_template('admin_agregar_producto.html')
@@ -365,7 +372,7 @@ def admin_modificar_producto(producto_id):
                 return redirect(url_for('admin_modificar_producto', producto_id=producto_id))
             
             cursor.execute('UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, imagen = ?, categoria = ? WHERE id = ?',
-                           (nombre, descripcion, precio, imagen, categoria, producto_id))
+                          (nombre, descripcion, precio, imagen, categoria, producto_id))
             conn.commit()
             conn.close()
             flash('Producto modificado exitosamente.', 'success')
